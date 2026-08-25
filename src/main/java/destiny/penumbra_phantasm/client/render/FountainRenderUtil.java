@@ -61,13 +61,13 @@ public class FountainRenderUtil {
 	private static final float DEPTHS_SWIRL_PIXELS = 256f;
 	private static final float DEPTHS_VORTEX_PIXELS = 512f;
 
-	private static final float DEPTHS_SWIRL_SIZE_MUL = 2f;
+	private static final float DEPTHS_SWIRL_SIZE = 2f;
 
-	private static final float DEPTHS_ALPHA_FLOOR = 0.25f;
+	private static final float DEPTHS_ALPHA_MIN = 0.25f;
 	private static final float DEPTHS_DIM_DISTANCE = 256;
 
-	private static final float DEPTHS_SWIRL_CULL_DISTANCE = 80f;
-	private static final float DEPTHS_SWIRL_FADE_START = 32f;
+	private static final float DEPTHS_SWIRL_CULL_DISTANCE = 128f;
+	private static final float DEPTHS_SWIRL_FADE_START = 96f;
 
 	private static final float DEPTHS_VORTEX_Y = 4f;
 	private static final float DEPTHS_VORTEX_DEG_PER_TICK = 6f;
@@ -781,13 +781,15 @@ public class FountainRenderUtil {
 		poseStack.translate(0.5f, 0.5f, 0.5f);
 		poseStack.translate(0f, -1.95f, 0f);
 		getCrackModel().renderToBuffer(poseStack, buffer.getBuffer(RenderTypes.fountain(textureCrack)),
-				LightTexture.FULL_BRIGHT, overlay, 1F, 1F, 1F, 1F);
+				LightTexture.FULL_BRIGHT, overlay, 1f, 1f, 1f, 1f);
 		poseStack.popPose();
 	}
 
 	public static void renderDepthsFountain(DarkFountain fountain, PoseStack poseStack, MultiBufferSource buffer, Camera camera, double distance2d, float partialTick, float lodFade) {
-		float dim = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_FLOOR, 1.0);
+		float dim = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_MIN, 1.0);
+
 		poseStack.pushPose();
+
 		poseStack.translate(0.5f, 0.5f, 0.5f);
 
 		renderDepthsHorizontalPlane(poseStack, buffer.getBuffer(RenderTypes.fountainNoCull(DEPTHS_OPENING)),
@@ -795,18 +797,24 @@ public class FountainRenderUtil {
 
 		Level level = Minecraft.getInstance().level;
 		float vortexAlpha = dim * (1f - lodFade);
+
 		if (level != null && vortexAlpha > 0.01f) {
 			float vortexYaw = (level.getGameTime() + partialTick) * DEPTHS_VORTEX_DEG_PER_TICK;
+
 			poseStack.pushPose();
+
 			poseStack.translate(0f, DEPTHS_VORTEX_Y, 0f);
 			poseStack.mulPose(Axis.YP.rotationDegrees(vortexYaw));
+
 			renderDepthsHorizontalPlane(poseStack, buffer.getBuffer(RenderTypes.fountainNoCull(DEPTHS_VORTEX)),
 					DEPTHS_VORTEX_PIXELS / 16f, 0f, 1f, 1f, 1f, vortexAlpha);
+
 			poseStack.popPose();
 		}
 
 		if (distance2d < DEPTHS_SWIRL_CULL_DISTANCE) {
 			float swirlDim = (float) Mth.clamp(1.0 - (distance2d - DEPTHS_SWIRL_FADE_START) / (DEPTHS_SWIRL_CULL_DISTANCE - DEPTHS_SWIRL_FADE_START), 0.0, 1.0);
+
 			if (swirlDim > 0f) {
 				for (DepthsFountainSwirls.Swirl swirl : DepthsFountainSwirls.swirlsAt(fountain.getFountainPos())) {
 					float age = swirl.age + partialTick;
@@ -814,22 +822,28 @@ public class FountainRenderUtil {
 					float fadeIn = Mth.clamp(t / 0.15f, 0f, 1f);
 					float fadeOut = Mth.clamp((1f - t) / 0.3f, 0f, 1f);
 					float alpha = fadeIn * fadeOut * swirlDim;
+
 					if (alpha <= 0.01f) {
 						continue;
 					}
-					float size = (1f - t) * (DEPTHS_SWIRL_PIXELS / 16f) * DEPTHS_SWIRL_SIZE_MUL;
+
+					float size = (1f - t) * (DEPTHS_SWIRL_PIXELS / 16f) * DEPTHS_SWIRL_SIZE;
 					if (size <= 0.01f) {
 						continue;
 					}
+
 					float y = -Mth.lerp(t, swirl.startYOffset, 0f);
 					float yaw = swirl.yaw + swirl.spinSpeedDeg * partialTick;
 
 					poseStack.pushPose();
+
 					poseStack.translate(0f, y, 0f);
 					poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
 					ResourceLocation swirlTex = swirl.small ? DEPTHS_SWIRL_SMALL : DEPTHS_SWIRL;
+
 					renderDepthsHorizontalPlane(poseStack, buffer.getBuffer(RenderTypes.fountainNoCull(swirlTex)),
 							size, 0f, 1f, 1f, 1f, alpha * dim);
+
 					poseStack.popPose();
 				}
 			}
@@ -839,7 +853,7 @@ public class FountainRenderUtil {
 	}
 
 	public static void renderDepthsFountainBeam(PoseStack poseStack, MultiBufferSource buffer, Camera camera, double distance2d) {
-		float dim = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_FLOOR, 1.0);
+		float dim = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_MIN, 1.0);
 		poseStack.pushPose();
 		poseStack.translate(0.5f, 0.5f, 0.5f);
 		renderDepthsBeam(poseStack, buffer.getBuffer(RenderTypes.fountainBeam()), camera, dim);

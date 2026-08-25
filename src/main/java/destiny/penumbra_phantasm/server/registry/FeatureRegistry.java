@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.PointedDripstoneConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
@@ -46,6 +47,8 @@ public class FeatureRegistry {
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> WEEPING_EYE_FEATURE = FEATURES.register("weeping_eye_feature", () -> new WeepingEyeFeature(NoneFeatureConfiguration.CODEC));
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> CLIFFROCK_SLIDE_FEATURE = FEATURES.register("cliffrock_slide_feature", () -> new CliffrockSlideFeature(NoneFeatureConfiguration.CODEC));
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> DUST_FEATURE = FEATURES.register("dust_feature", () -> new DustFeature(NoneFeatureConfiguration.CODEC));
+
+    public static final RegistryObject<Feature<PointedDripstoneConfiguration>> TENEBRALITH_SPIKE_FEATURE = FEATURES.register("tenebralith_spike_feature", () -> new TenebralithSpikeFeature(PointedDripstoneConfiguration.CODEC));
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
         return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(PenumbraPhantasm.MODID, name));

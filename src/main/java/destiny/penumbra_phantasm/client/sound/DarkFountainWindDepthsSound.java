@@ -5,7 +5,7 @@ import net.minecraft.sounds.SoundEvent;
 
 public class DarkFountainWindDepthsSound extends DarkFountainSound<DarkFountain>{
     private static final float VOLUME_MIN = 0.0F;
-    private static final float VOLUME_MAX = 0.25F;
+    private static final float VOLUME_MAX = 0.4F;
 
     public DarkFountainWindDepthsSound(DarkFountain fountain, SoundEvent soundEvent) {
         super(fountain, soundEvent, 64, 96);
