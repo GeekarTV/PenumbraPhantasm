@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 
 public class DepthsSkyLightning {
     public static final int FLASH_PERIOD = 300;
-    public static final float FLASH_CHANCE = 0.35f;
+    public static final float FLASH_CHANCE = 0.45f;
     public static final int FLASH_DURATION_TICKS = 100;
     public static final float FLASH_MIN_RADIUS = 40f;
     public static final float FLASH_MAX_RADIUS = 100f;

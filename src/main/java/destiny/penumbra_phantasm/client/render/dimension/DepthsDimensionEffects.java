@@ -42,12 +42,12 @@ public class DepthsDimensionEffects extends DimensionSpecialEffects {
     public static final int MIN_DEBRIS_COUNT = 10;
     public static final int MAX_DEBRIS_COUNT = 13;
 
-    private static final float HORIZON_OFFSET = -5F;
-    private static final float SPRITE_SIZE = 16F;
+    private static final float HORIZON_OFFSET = -7.5F;
+    private static final float SPRITE_SIZE = 24F;
 
-    private static final float FLASH_RADIUS_SCALE = 1.5F;
+    private static final float FLASH_RADIUS_SCALE = 2.25F;
     private static final int FLASH_SEGMENTS = 24;
-    public static final float FLASH_Y = 8F;
+    public static final float FLASH_Y = 12F;
 
     private static final float CYLINDER_RADIUS = 96F;
 
