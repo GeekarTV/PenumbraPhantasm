@@ -130,7 +130,7 @@ public class KnifeItem extends SwordItem {
         if (DarkFountain.isDepthsXzOccupied(((ServerLevel) level).getServer(),
                 DarkFountain.scaledDepthsX(occupancySeed.getX()),
                 DarkFountain.scaledDepthsZ(occupancySeed.getZ()))) {
-            player.displayClientMessage(Component.translatable("message.penumbra_phantasm.making_fountain_depths_xz_occupied"), true);
+            player.displayClientMessage(Component.translatable("message.penumbra_phantasm.making_fountain_depths_conflict"), true);
             return InteractionResultHolder.fail(stack);
         }
 

@@ -45,7 +45,7 @@ public class LocationTitleOverlay {
 
         String currentLocation = cap.currentLocation;
         int ticker = cap.titleAlphaTicker;
-        if (ticker < 0)
+        if (ticker < 0 || ticker >= 80)
             return;
 
         if(lastTick == -1 || ticker == 0)
