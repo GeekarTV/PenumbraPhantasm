@@ -1,13 +1,10 @@
 package destiny.penumbra_phantasm.client.sound;
 
-import destiny.penumbra_phantasm.PenumbraPhantasm;
-import destiny.penumbra_phantasm.client.ClientConfig;
 import destiny.penumbra_phantasm.server.capability.DarkFountainCapability;
 import destiny.penumbra_phantasm.server.datapack.BiomeMusicType;
 import destiny.penumbra_phantasm.server.fountain.DarkFountain;
-import destiny.penumbra_phantasm.server.egg.EggRoomUtil;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomUtil;
 import destiny.penumbra_phantasm.server.registry.CapabilityRegistry;
-import destiny.penumbra_phantasm.server.registry.SoundRegistry;
 import destiny.penumbra_phantasm.server.util.DarkWorldUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -16,8 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -27,12 +22,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MusicManager {

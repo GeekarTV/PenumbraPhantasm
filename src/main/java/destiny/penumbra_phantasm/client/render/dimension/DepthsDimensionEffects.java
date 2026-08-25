@@ -60,7 +60,7 @@ public class DepthsDimensionEffects extends DimensionSpecialEffects {
 
     public DepthsDimensionEffects() {
         super(Float.NaN, true, SkyType.NONE, false, false);
-        this.skyBuffer = DarkWorldDimensionEffects.createLightSky();
+        this.skyBuffer = DarkWorldDimensionEffects.createDarkSky();
         this.dynamicTexturedBuffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
         this.dynamicColorBuffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
     }
@@ -122,9 +122,23 @@ public class DepthsDimensionEffects extends DimensionSpecialEffects {
 
             int textureIndex = random.nextInt(TITAN_TEXTURES.length);
 
-            Vec3 center = new Vec3(Mth.cos(azimuth) * CYLINDER_RADIUS, HORIZON_OFFSET + SPRITE_SIZE, Mth.sin(azimuth) * CYLINDER_RADIUS);
+            boolean shouldPlace = false;
+            for (Sprite sprite : placed) {
+                if (shouldPlace) break;
 
-            placed.add(new Sprite(center, SPRITE_SIZE, SPRITE_SIZE, true, textureIndex));
+                Vec3 center = new Vec3(Mth.cos(azimuth) * CYLINDER_RADIUS, HORIZON_OFFSET + SPRITE_SIZE, Mth.sin(azimuth) * CYLINDER_RADIUS);
+
+                for (int tries = 0; tries < 15; tries++) {
+                    if (center.distanceTo(sprite.center) < 20) {
+                        azimuth = random.nextFloat() * ((float) (Math.PI * 2));
+                        center = new Vec3(Mth.cos(azimuth) * CYLINDER_RADIUS, HORIZON_OFFSET + SPRITE_SIZE, Mth.sin(azimuth) * CYLINDER_RADIUS);
+                    } else {
+                        placed.add(new Sprite(center, SPRITE_SIZE, SPRITE_SIZE, true, textureIndex));
+                        shouldPlace = true;
+                        break;
+                    }
+                }
+            }
         }
 
         return placed;

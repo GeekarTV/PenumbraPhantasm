@@ -1,6 +1,6 @@
 package destiny.penumbra_phantasm.mixin;
 
-import destiny.penumbra_phantasm.server.egg.EggRoomUtil;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;

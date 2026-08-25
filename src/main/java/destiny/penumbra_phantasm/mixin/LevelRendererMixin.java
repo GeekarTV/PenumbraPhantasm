@@ -1,6 +1,6 @@
 package destiny.penumbra_phantasm.mixin;
 
-import destiny.penumbra_phantasm.server.egg.EggRoomUtil;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.world.level.Level;

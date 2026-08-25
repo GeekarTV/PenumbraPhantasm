@@ -555,7 +555,7 @@ public class IntroScreen extends Screen {
                     float delta = Mth.clamp((tick - choiceLerpStartTick) / 3f, 0f, 1f);
                     yPos = Mth.lerp(delta, oldChoiceSoulY, targetY);
                     if (delta >= 1f) {
-                        choiceLerpStartTick = -1;  // Reset once lerp completes
+                        choiceLerpStartTick = -1;
                     }
                 }
 
@@ -684,9 +684,8 @@ public class IntroScreen extends Screen {
     }
 
     private void renderTextLayer(GuiGraphics graphics, Font font, Component text, int x, int y, int color, float alpha) {
-        if (alpha <= 0.05f) return; // Optimization: don't render if invisible
+        if (alpha <= 0.05f) return;
 
-        // Extract RGB and apply our custom alpha
         int r = (color >> 16) & 0xFF;
         int g = (color >> 8) & 0xFF;
         int b = color & 0xFF;
@@ -698,7 +697,6 @@ public class IntroScreen extends Screen {
 
     public void incrementChoice(int increment) {
         if (increment != 0) {
-            // Record old Y before changing choice
             float oldY = -45f + (20 * currentChoice);
             int oldChoice = currentChoice;
             currentChoice = Mth.clamp(currentChoice + increment, 1, 7);
@@ -709,10 +707,8 @@ public class IntroScreen extends Screen {
         }
     }
 
-    public void pickChoice()
-    {
+    public void pickChoice() {
         isChoosing = false;
-        // Choose what is currently selected(Pressing ENTER)
     }
 
     public Component getSpacedNickname(Component nickname) {

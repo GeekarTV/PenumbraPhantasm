@@ -1,6 +1,6 @@
 package destiny.penumbra_phantasm.server.network;
 
-import destiny.penumbra_phantasm.server.egg.EggRoomManager;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

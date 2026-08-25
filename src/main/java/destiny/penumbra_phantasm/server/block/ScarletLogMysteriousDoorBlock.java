@@ -1,7 +1,7 @@
 package destiny.penumbra_phantasm.server.block;
 
-import destiny.penumbra_phantasm.server.egg.EggRoomManager;
-import destiny.penumbra_phantasm.server.egg.EggRoomUtil;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomManager;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomUtil;
 import destiny.penumbra_phantasm.server.util.DarkWorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

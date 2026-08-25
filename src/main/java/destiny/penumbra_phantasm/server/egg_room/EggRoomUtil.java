@@ -1,4 +1,4 @@
-package destiny.penumbra_phantasm.server.egg;
+package destiny.penumbra_phantasm.server.egg_room;
 
 import destiny.penumbra_phantasm.PenumbraPhantasm;
 import net.minecraft.core.registries.Registries;

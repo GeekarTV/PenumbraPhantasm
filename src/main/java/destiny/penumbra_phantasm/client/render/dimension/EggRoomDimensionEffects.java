@@ -20,7 +20,7 @@ public class EggRoomDimensionEffects extends DimensionSpecialEffects {
 
 	public EggRoomDimensionEffects() {
 		super(Float.NaN, true, SkyType.NONE, false, false);
-		this.skyBuffer = DarkWorldDimensionEffects.createLightSky();
+		this.skyBuffer = DarkWorldDimensionEffects.createDarkSky();
 	}
 
 	@Override

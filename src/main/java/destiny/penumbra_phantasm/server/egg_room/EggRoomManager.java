@@ -1,4 +1,4 @@
-package destiny.penumbra_phantasm.server.egg;
+package destiny.penumbra_phantasm.server.egg_room;
 
 import destiny.penumbra_phantasm.PenumbraPhantasm;
 import destiny.penumbra_phantasm.client.network.ClientBoundEggRoomCoverPacket;
@@ -64,14 +64,17 @@ public class EggRoomManager {
 
 	public static void ensurePlaced(ServerLevel eggLevel) {
 		Data data = Data.get(eggLevel);
+
 		if (data.placed) {
 			return;
 		}
+
 		Optional<StructureTemplate> templateOpt = eggLevel.getStructureManager().get(STRUCTURE_ID);
 		if (templateOpt.isEmpty()) {
 			PenumbraPhantasm.LOGGER.error("Missing structure {}", STRUCTURE_ID);
 			return;
 		}
+
 		StructureTemplate template = templateOpt.get();
 		Vec3i size = template.getSize();
 		BlockPos origin = new BlockPos(-size.getX() / 2, EggRoomUtil.PLACE_Y, -size.getZ() / 2);
@@ -86,12 +89,11 @@ public class EggRoomManager {
 				for (int z = origin.getZ(); z < origin.getZ() + size.getZ(); z++) {
 					cursor.set(x, y, z);
 					BlockState state = eggLevel.getBlockState(cursor);
+
 					if (state.is(Blocks.BLACK_CONCRETE)) {
 						eggLevel.setBlock(cursor, BlockRegistry.UNBREAKABLE_DARKNESS.get().defaultBlockState(), 2);
-					} else if (state.is(BlockRegistry.SCARLET_LOG.get())
-							&& state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y
-							&& (tree == null || y < tree.getY()
-							|| (y == tree.getY() && (x < tree.getX() || (x == tree.getX() && z < tree.getZ()))))) {
+					} else if (state.is(BlockRegistry.SCARLET_LOG.get()) && state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y
+							&& (tree == null || y < tree.getY() || (y == tree.getY() && (x < tree.getX() || (x == tree.getX() && z < tree.getZ()))))) {
 						tree = cursor.immutable();
 					}
 				}
@@ -115,23 +117,16 @@ public class EggRoomManager {
 	}
 
 	public static void enterFromDoor(Player player, Level originLevel, BlockPos doorLower) {
-		if (!(player instanceof ServerPlayer serverPlayer) || originLevel.isClientSide) {
-			return;
-		}
-		if (EggRoomUtil.isEggRoom(serverPlayer.level())) {
-			return;
-		}
-		if (isDoorLocked(serverPlayer.getUUID()) || isPendingDoor(originLevel.dimension(), doorLower)) {
-			return;
-		}
+		if (!(player instanceof ServerPlayer serverPlayer) || originLevel.isClientSide) return;
+		if (EggRoomUtil.isEggRoom(serverPlayer.level())) return;
+		if (isDoorLocked(serverPlayer.getUUID()) || isPendingDoor(originLevel.dimension(), doorLower)) return;
+
 		MinecraftServer server = serverPlayer.getServer();
-		if (server == null) {
-			return;
-		}
+		if (server == null) return;
+
 		ServerLevel eggLevel = server.getLevel(EggRoomUtil.CARD_KINGDOM_EGG_ROOM);
-		if (eggLevel == null) {
-			return;
-		}
+		if (eggLevel == null) return;
+
 		lockDoor(serverPlayer.getUUID(), 8000);
 		ensurePlaced(eggLevel);
 		forceRoomChunks(eggLevel, Data.get(eggLevel));
@@ -158,16 +153,14 @@ public class EggRoomManager {
 	}
 
 	public static void onChangedToEggRoom(ServerPlayer player) {
-		if (!EggRoomUtil.isEggRoom(player.level())) {
-			return;
-		}
+		if (!EggRoomUtil.isEggRoom(player.level())) return;
+
 		prepareArrival(player);
 	}
 
 	public static void onClientReady(ServerPlayer player) {
-		if (!TRANSIT.contains(player.getUUID())) {
-			return;
-		}
+		if (!TRANSIT.contains(player.getUUID())) return;
+
 		endTransit(player);
 	}
 
@@ -183,23 +176,25 @@ public class EggRoomManager {
 	}
 
 	private static void prepareArrival(ServerPlayer player) {
-		if (!(player.level() instanceof ServerLevel eggLevel) || !EggRoomUtil.isEggRoom(eggLevel)) {
-			return;
-		}
+		if (!(player.level() instanceof ServerLevel eggLevel) || !EggRoomUtil.isEggRoom(eggLevel)) return;
+
 		ensurePlaced(eggLevel);
+
 		Data data = Data.get(eggLevel);
 		forceRoomChunks(eggLevel, data);
+
 		LEFT_ENTRANCE.remove(player.getUUID());
 		player.getCapability(CapabilityRegistry.SOUL).ifPresent(cap -> cap.eggLeftEntrance = false);
+
 		Vec3 spawn = EggRoomUtil.spawnPos();
+
 		beginTransit(player, eggLevel.dimension(), true, spawn.x, spawn.y, spawn.z, EggRoomUtil.SPAWN_YAW);
 		scheduleResync(player, true, spawn.x, spawn.y, spawn.z, EggRoomUtil.SPAWN_YAW);
 	}
 
 	public static void leaveToOrigin(ServerPlayer player) {
-		if (!LEAVING.add(player.getUUID())) {
-			return;
-		}
+		if (!LEAVING.add(player.getUUID())) return;
+
 		try {
 			leaveToOriginInner(player);
 		} finally {
@@ -209,9 +204,11 @@ public class EggRoomManager {
 
 	private static void leaveToOriginInner(ServerPlayer player) {
 		MinecraftServer server = player.getServer();
+
 		if (server == null) {
 			return;
 		}
+
 		SoulCapability cap = player.getCapability(CapabilityRegistry.SOUL).orElse(null);
 		ServerLevel dest = null;
 		double x = player.getX();
@@ -219,21 +216,26 @@ public class EggRoomManager {
 		double z = player.getZ();
 		float yaw = player.getYRot();
 		BlockPos door = BlockPos.ZERO;
-		if (cap != null && cap.eggReturnDim != null && !cap.eggReturnDim.isEmpty()) {
+
+		if (cap.eggReturnDim != null && !cap.eggReturnDim.isEmpty()) {
 			ResourceLocation loc = ResourceLocation.tryParse(cap.eggReturnDim);
+
 			if (loc != null) {
 				dest = server.getLevel(ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION, loc));
 			}
+
 			x = cap.eggReturnX;
 			y = cap.eggReturnY;
 			z = cap.eggReturnZ;
 			yaw = cap.eggReturnYaw;
 			door = new BlockPos(cap.eggDoorX, cap.eggDoorY, cap.eggDoorZ);
 		}
+
 		if (dest == null) {
 			ResourceKey<Level> respawn = player.getRespawnDimension();
 			dest = server.getLevel(respawn);
 			BlockPos bed = player.getRespawnPosition();
+
 			if (dest != null && bed != null) {
 				x = bed.getX() + 0.5;
 				y = bed.getY();
@@ -246,10 +248,9 @@ public class EggRoomManager {
 				z = spawn.getZ() + 0.5;
 			}
 		}
-		if (dest == null) {
-			return;
-		}
-		lockDoor(player.getUUID(), 2500);
+
+        lockDoor(player.getUUID(), 2500);
+
 		if (door != BlockPos.ZERO && dest.getBlockState(door).getBlock() instanceof ScarletLogMysteriousDoorBlock) {
 			BlockState doorState = dest.getBlockState(door);
 			Direction facing = doorState.getValue(ScarletLogMysteriousDoorBlock.FACING);
@@ -261,15 +262,17 @@ public class EggRoomManager {
 			dest.playSound(null, door, SoundEvents.CHERRY_WOOD_DOOR_OPEN, SoundSource.BLOCKS, 1f, 1f);
 			PENDING_DOORS.add(new PendingDoor(dest.dimension(), door.immutable(), dest.getGameTime() + 20));
 		}
+
 		LEFT_ENTRANCE.remove(player.getUUID());
-		if (cap != null) {
-			cap.eggLeftEntrance = false;
-			cap.eggReturnDim = "";
-		}
-		dest.getChunk(BlockPos.containing(x, y, z));
+
+        cap.eggLeftEntrance = false;
+        cap.eggReturnDim = "";
+
+        dest.getChunk(BlockPos.containing(x, y, z));
 		beginTransit(player, dest.dimension(), false, x, y, z, yaw);
 		player.teleportTo(dest, x, y, z, yaw, 0f);
 		scheduleResync(player, false, x, y, z, yaw);
+
 		LEFT_ENTRANCE.remove(player.getUUID());
 	}
 
@@ -361,6 +364,7 @@ public class EggRoomManager {
 		} else if (EggRoomUtil.inTreeBehind(x, z, data.treeX, data.treeZ)) {
 			script = gone ? ClientBoundTextBoxPacket.TREE_BEHIND_GONE : ClientBoundTextBoxPacket.TREE_BEHIND;
 		}
+
 		if (script != null) {
 			PacketHandlerRegistry.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ClientBoundTextBoxPacket(script));
 		}
@@ -370,18 +374,22 @@ public class EggRoomManager {
 		if (!ClientBoundTextBoxPacket.TREE_BEHIND.equals(scriptId)) {
 			return;
 		}
+
 		SoulCapability cap = player.getCapability(CapabilityRegistry.SOUL).orElse(null);
-		if (cap == null || cap.hasEggRoomManGone(EggRoomUtil.CARD_KINGDOM_BIT)) {
+		if (cap.hasEggRoomManGone(EggRoomUtil.CARD_KINGDOM_BIT)) {
 			return;
 		}
+
 		cap.setEggRoomManGone(EggRoomUtil.CARD_KINGDOM_BIT);
 		if (yes) {
 			if (!cap.hasEggObtained(EggRoomUtil.CARD_KINGDOM_BIT)) {
 				cap.setEggObtained(EggRoomUtil.CARD_KINGDOM_BIT);
+
 				if (!player.addItem(new ItemStack(ItemRegistry.EGG.get()))) {
 					player.drop(new ItemStack(ItemRegistry.EGG.get()), false);
 				}
 			}
+
 			PacketHandlerRegistry.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
 					new ClientBoundTextBoxPacket(ClientBoundTextBoxPacket.RECEIVED_EGG));
 		} else {
@@ -394,6 +402,7 @@ public class EggRoomManager {
 		if (!EggRoomUtil.isEggRoom(player.level()) || isInTransit(player.getUUID())) {
 			return;
 		}
+
 		Vec3 spawn = EggRoomUtil.spawnPos();
 		player.setNoGravity(false);
 		player.setDeltaMovement(Vec3.ZERO);
@@ -421,6 +430,7 @@ public class EggRoomManager {
 		player.setNoGravity(true);
 		player.setDeltaMovement(Vec3.ZERO);
 		player.fallDistance = 0f;
+
 		if (first) {
 			ChunkPos chunk = new ChunkPos(BlockPos.containing(x, y, z));
 			PacketHandlerRegistry.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
@@ -432,16 +442,19 @@ public class EggRoomManager {
 		if (!RESYNC_SCHEDULED.add(player.getUUID())) {
 			return;
 		}
+
 		MinecraftServer server = player.getServer();
 		if (server == null) {
 			RESYNC_SCHEDULED.remove(player.getUUID());
 			return;
 		}
+
 		server.execute(() -> {
 			RESYNC_SCHEDULED.remove(player.getUUID());
 			if (player.hasDisconnected()) {
 				return;
 			}
+
 			resyncNow(player, eggRoom, x, y, z, yaw);
 		});
 	}
@@ -588,6 +601,7 @@ public class EggRoomManager {
 			data.treeX = tag.getInt("treeX");
 			data.treeY = tag.getInt("treeY");
 			data.treeZ = tag.getInt("treeZ");
+
 			return data;
 		}
 
@@ -603,6 +617,7 @@ public class EggRoomManager {
 			tag.putInt("treeX", treeX);
 			tag.putInt("treeY", treeY);
 			tag.putInt("treeZ", treeZ);
+
 			return tag;
 		}
 

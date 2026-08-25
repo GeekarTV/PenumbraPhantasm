@@ -275,9 +275,6 @@ public class KnifeItem extends SwordItem {
         return 72000;
     }
 
-    //TODO:
-    // - Made opening the fountain depend on the soul capability and determination (100% = 1 fountain)
-
     @Override
     public void inventoryTick(@NotNull ItemStack stack, Level level, @NotNull Entity entity, int i, boolean b) {
         if (level.isClientSide()) return;
@@ -324,27 +321,20 @@ public class KnifeItem extends SwordItem {
         double forwardX = Math.sin(yawRad);
         double forwardZ = Math.cos(yawRad);
 
-        //Center with an offset forward from the player
         double offsetDist = 2.0;
         double centerX = fountainPos.getX() + forwardX * offsetDist;
         double centerZ = fountainPos.getZ() + forwardZ * offsetDist;
 
-        //Row should move to the right from player perspective
         double rowX = -forwardZ;
-
-        //Spacing between particles
         double spacing = 0.5;
 
-        //Index for particles [-4;4]
         int index = tick - 7;
         double offsetAlongRow = index * spacing;
 
-        //Final particle positioning
         double particleX = centerX + rowX * offsetAlongRow;
         double particleY = fountainPos.above().getY() + 1 + (-0.5f + level.getRandom().nextFloat() * 0.5f);
         double particleZ = centerZ + forwardX * offsetAlongRow;
 
-        //Spawn particle
         PacketHandlerRegistry.INSTANCE.send(
                 PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(particleX, particleY, particleZ, 32.0, level.dimension())),
                 new ClientBoundParticlePacket(ForgeRegistries.PARTICLE_TYPES.getKey(ParticleTypeRegistry.FOUNTAIN_TARGET.get()), particleX, particleY, particleZ, 0, 0, 0, 1)

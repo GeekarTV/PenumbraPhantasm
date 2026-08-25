@@ -1,7 +1,7 @@
 package destiny.penumbra_phantasm.client.render.screen;
 
 import destiny.penumbra_phantasm.PenumbraPhantasm;
-import destiny.penumbra_phantasm.server.egg.EggRoomUtil;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomUtil;
 import destiny.penumbra_phantasm.server.network.ServerBoundEggRoomReadyPacket;
 import destiny.penumbra_phantasm.server.registry.PacketHandlerRegistry;
 import net.minecraft.client.GameNarrator;

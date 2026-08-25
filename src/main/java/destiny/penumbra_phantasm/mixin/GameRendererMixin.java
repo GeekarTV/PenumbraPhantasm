@@ -11,7 +11,7 @@ import destiny.penumbra_phantasm.client.render.overlay.FountainDarknessOverlay;
 import destiny.penumbra_phantasm.client.render.screen.IntroScreen;
 import destiny.penumbra_phantasm.client.render.textbox.DarkWorldDialogue;
 import destiny.penumbra_phantasm.client.render.textbox.DarkWorldTextBox;
-import destiny.penumbra_phantasm.server.egg.EggRoomUtil;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomUtil;
 import destiny.penumbra_phantasm.server.registry.CapabilityRegistry;
 import destiny.penumbra_phantasm.server.util.DarkWorldUtil;
 import net.minecraft.client.Camera;

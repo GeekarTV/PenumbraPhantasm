@@ -1,6 +1,6 @@
 package destiny.penumbra_phantasm.mixin;
 
-import destiny.penumbra_phantasm.server.egg.EggRoomUtil;
+import destiny.penumbra_phantasm.server.egg_room.EggRoomUtil;
 import destiny.penumbra_phantasm.server.util.DarkWorldUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;

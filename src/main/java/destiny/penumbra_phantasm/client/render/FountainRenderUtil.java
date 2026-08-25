@@ -395,7 +395,6 @@ public class FountainRenderUtil {
 			float tintGreen = 1f + (middleGreen - 1f) * tintDelta;
 			float tintBlue = 1f + (middleBlue - 1f) * tintDelta;
 
-			// Global tint is now handled by FountainHueShiftRenderer, so setShaderColor is removed.
 			if (shaderInstance != null) {
 				shaderInstance.safeGetUniform("TintColor").set(
 						tintRed,
