@@ -77,7 +77,7 @@ public class DarkFountain {
     public static final double DEPTHS_SUCTION_Y = 64.0;
 
     public static final double DEPTHS_CONTACT_XZ = 3;
-    public static final double DEPTHS_CONTACT_Y = 1;
+    public static final double DEPTHS_CONTACT_Y = 3;
     public static final double DEPTHS_EJECT_OFFSET = -0.45;
 
     public BlockPos fountainPos;
