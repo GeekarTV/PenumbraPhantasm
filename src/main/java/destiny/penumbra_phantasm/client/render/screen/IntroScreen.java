@@ -494,7 +494,7 @@ public class IntroScreen extends Screen {
         if (this.tick > depthsStart) {
             // BG Depths
             pose.pushPose();
-            RenderBlitUtil.blit(IMAGE_DEPTH, pose, 0, 0, depthsColor, depthsColor, depthsColor, 1, 0, 0, this.width, this.height, this.width, this.height);
+            //RenderBlitUtil.blit(IMAGE_DEPTH, pose, 0, 0, depthsColor, depthsColor, depthsColor, 1, 0, 0, this.width, this.height, this.width, this.height);
             pose.popPose();
 
             List<Float> sortedDepths = new ArrayList<>(activeDepths);
