@@ -5,7 +5,7 @@
     "settings": {
       "biome": "penumbra_phantasm:challenger_dark",
       "lakes": false,
-      "features": false,
+      "features": true,
       "layers": [
         {
           "height": 1,

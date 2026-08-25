@@ -998,27 +998,25 @@ public class DarkFountain {
     }
 
     private static boolean canPierceFountain(ServerPlayer player) {
-        if (player.isCreative()) {
-            return true;
-        }
+        if (player.isCreative()) return true;
+
         SoulCapability soulCap = player.getCapability(CapabilityRegistry.SOUL).orElse(null);
-        return soulCap != null && soulCap.determination >= 100;
+
+        return soulCap.determination >= 100;
     }
 
     private void tryEnterDepths(ServerPlayer player, ServerLevel darkLevel) {
         ensureDepthsTwin(darkLevel);
-        if (this.depthsPos == null) {
-            return;
-        }
+
+        if (this.depthsPos == null) return;
+
         ServerLevel depths = DarkWorldUtil.getDepths(darkLevel.getServer());
-        if (depths == null) {
-            return;
-        }
+        if (depths == null) return;
+
         DarkFountain depthsFountain = depths.getCapability(CapabilityRegistry.DARK_FOUNTAIN)
                 .map(cap -> cap.darkFountains.get(this.depthsPos)).orElse(null);
-        if (depthsFountain == null) {
-            return;
-        }
+
+        if (depthsFountain == null) return;
 
         player.getCapability(CapabilityRegistry.SCREEN_ANIMATION).ifPresent(cap -> {
             cap.depthsEntryTicker = 0;
@@ -1039,8 +1037,7 @@ public class DarkFountain {
     private void tickDepthsFountain(ServerLevel level) {
         Vec3 opening = this.fountainPos.getCenter();
         double suctionY = DEPTHS_SUCTION_Y;
-        AABB suctionBox = new AABB(opening, opening).inflate(DEPTHS_SUCTION_XZ, 0.0, DEPTHS_SUCTION_XZ)
-                .expandTowards(0.0, -suctionY, 0.0)
+        AABB suctionBox = new AABB(opening, opening).inflate(DEPTHS_SUCTION_XZ, 0.0, DEPTHS_SUCTION_XZ).expandTowards(0.0, -suctionY, 0.0)
                 .expandTowards(0.0, 2.0, 0.0);
         AABB contactBox = new AABB(opening, opening).inflate(DEPTHS_CONTACT_XZ, DEPTHS_CONTACT_Y, DEPTHS_CONTACT_XZ);
 
@@ -1048,9 +1045,11 @@ public class DarkFountain {
             double dx = player.getX() - opening.x;
             double dz = player.getZ() - opening.z;
             double xz = Math.sqrt(dx * dx + dz * dz);
+
             if (xz > DEPTHS_SUCTION_XZ) {
                 this.teleportedEntities.remove(player.getUUID());
                 this.depthsTransit.remove(player.getUUID());
+
                 continue;
             }
 
