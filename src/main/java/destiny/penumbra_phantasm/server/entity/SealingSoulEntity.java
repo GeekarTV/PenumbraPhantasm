@@ -66,7 +66,7 @@ public class SealingSoulEntity extends Entity {
         if(darkLazyCapability.isPresent() && darkLazyCapability.resolve().isPresent())
             darkFountainCapability = darkLazyCapability.resolve().get();
 
-        if (darkFountainCapability == null){
+        if (darkFountainCapability == null) {
             this.discard();
             return;
         }
@@ -87,35 +87,43 @@ public class SealingSoulEntity extends Entity {
             }
         }
 
-        if (darkFountain == null){
+        if (darkFountain == null) {
             this.discard();
             return;
         }
 
-        Level depthsLevel = level.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, ResourceLocation.tryBuild(PenumbraPhantasm.MODID, "depths")));
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        ServerLevel depthsLevel = DarkWorldUtil.getDepths(serverLevel.getServer());
+
+        if (depthsLevel == null) {
+            this.discard();
+            return;
+        }
 
         DarkFountainCapability depthsFountainCapability = null;
         LazyOptional<DarkFountainCapability> depthsFountainLazyCapability = depthsLevel.getCapability(CapabilityRegistry.DARK_FOUNTAIN);
         if(depthsFountainLazyCapability.isPresent() && depthsFountainLazyCapability.resolve().isPresent())
             depthsFountainCapability = depthsFountainLazyCapability.resolve().get();
 
-        if (depthsFountainCapability == null){
+        if (depthsFountainCapability == null) {
             this.discard();
             return;
         }
 
         DarkFountain depthsFountain = depthsFountainCapability.darkFountains.get(darkFountain.depthsPos);
 
-        if (depthsFountain == null){
+        if (depthsFountain == null) {
             this.discard();
             return;
         }
 
         if (tick == 0) {
-            if (level instanceof ServerLevel serverLevel) {
-                ChunkPos soulChunk = new ChunkPos(getOnPos());
-                serverLevel.setChunkForced(soulChunk.x, soulChunk.z, true);
-            }
+            ChunkPos soulChunk = new ChunkPos(getOnPos());
+            serverLevel.setChunkForced(soulChunk.x, soulChunk.z, true);
+
             darkFountain.sealingTick = 0;
             darkFountain.sealingFrameTick = darkFountain.getFrameTick();
             depthsFountain.sealingTick = 0;

@@ -1,4 +1,4 @@
-package destiny.penumbra_phantasm.client.render;
+package destiny.penumbra_phantasm.client.render.fountain;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.mojang.math.Axis;
+import destiny.penumbra_phantasm.client.render.ModShaders;
+import destiny.penumbra_phantasm.client.render.RenderTypes;
 import destiny.penumbra_phantasm.client.render.model.*;
 import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
@@ -29,7 +31,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
-import static destiny.penumbra_phantasm.server.fountain.DarkFountain.SEAL_DURATION;
+import static destiny.penumbra_phantasm.server.fountain.DarkFountain.*;
 
 
 public class FountainRenderUtil {
@@ -77,6 +79,13 @@ public class FountainRenderUtil {
 	private static final float DEPTHS_BEAM_TOP_HALF = 2f;
 	private static final float DEPTHS_BEAM_BOTTOM_HALF = 5f;
 	private static final float DEPTHS_BEAM_LENGTH = 48f;
+
+	private static final int DEPTHS_FADE_OUT_DURATION = SEAL_DURATION;
+	private static final int DEPTHS_FADE_IN_START = SEAL_DURATION + SEAL_FLASH_DELAY;
+	private static final int DEPTHS_FADE_IN_END = DEPTHS_FADE_IN_START + SEAL_FLASH_DURATION - SEAL_FLASH_DURATION / 3;
+	private static final int DEPTHS_FADE_OUT_FINAL_START = DEPTHS_FADE_IN_END + SEAL_FLASH_DURATION / 3;
+	private static final int DEPTHS_FADE_OUT_FINAL_END = DEPTHS_FADE_IN_END + SEAL_FLASH_DURATION;
+
 
 	public static float openingPosterizeLumaThresholdForCameraBlockLight(Level level, Vec3 cameraPos, float baseThreshold) {
 		int blockLight = level.getBrightness(LightLayer.BLOCK, BlockPos.containing(cameraPos));
@@ -796,44 +805,35 @@ public class FountainRenderUtil {
 		renderDepthsHorizontalPlane(poseStack, buffer.getBuffer(RenderTypes.fountainNoCull(DEPTHS_OPENING)),
 				DEPTHS_OPENING_PIXELS / 16f, 0f, 1f, 1f, 1f, dim);
 
-		Level level = Minecraft.getInstance().level;
-		float vortexAlpha = dim * (1f - lodFade);
-
-		if (level != null && vortexAlpha > 0.01f) {
-			float vortexYaw = (level.getGameTime() + partialTick) * DEPTHS_VORTEX_DEG_PER_TICK;
-
-			poseStack.pushPose();
-
-			poseStack.translate(0f, DEPTHS_VORTEX_Y, 0f);
-			poseStack.mulPose(Axis.YP.rotationDegrees(vortexYaw));
-
-			renderDepthsHorizontalPlane(poseStack, buffer.getBuffer(RenderTypes.fountainNoCull(DEPTHS_VORTEX)),
-					DEPTHS_VORTEX_PIXELS / 16f, 0f, 1f, 1f, 1f, vortexAlpha);
-
-			poseStack.popPose();
-		}
-
 		if (distance2d < DEPTHS_SWIRL_CULL_DISTANCE) {
-			float swirlDim = (float) Mth.clamp(1.0 - (distance2d - DEPTHS_SWIRL_FADE_START) / (DEPTHS_SWIRL_CULL_DISTANCE - DEPTHS_SWIRL_FADE_START), 0.0, 1.0);
+			float swirlDim = (float) Mth.clamp(1.0 - (distance2d - DEPTHS_SWIRL_FADE_START) / (DEPTHS_SWIRL_CULL_DISTANCE - DEPTHS_SWIRL_FADE_START), 0, 1);
+			int sealingTick = fountain.sealingTick;
+
+			if (sealingTick >= 0 && sealingTick < DEPTHS_FADE_OUT_DURATION) {
+				swirlDim = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, swirlDim, 0);
+			}
+			if (sealingTick >= DEPTHS_FADE_OUT_DURATION) {
+				swirlDim = 0;
+			}
 
 			if (swirlDim > 0f) {
 				for (DepthsFountainSwirls.Swirl swirl : DepthsFountainSwirls.swirlsAt(fountain.getFountainPos())) {
 					float age = swirl.age + partialTick;
-					float t = Mth.clamp(age / swirl.lifetime, 0f, 1f);
-					float fadeIn = Mth.clamp(t / 0.15f, 0f, 1f);
-					float fadeOut = Mth.clamp((1f - t) / 0.3f, 0f, 1f);
+					float lifeTime = Mth.clamp(age / swirl.lifetime, 0f, 1f);
+					float fadeIn = Mth.clamp(lifeTime / 0.15f, 0f, 1f);
+					float fadeOut = Mth.clamp((1f - lifeTime) / 0.3f, 0f, 1f);
 					float alpha = fadeIn * fadeOut * swirlDim;
 
 					if (alpha <= 0.01f) {
 						continue;
 					}
 
-					float size = (1f - t) * (DEPTHS_SWIRL_PIXELS / 16f) * DEPTHS_SWIRL_SIZE;
+					float size = (1f - lifeTime) * (DEPTHS_SWIRL_PIXELS / 16f) * DEPTHS_SWIRL_SIZE;
 					if (size <= 0.01f) {
 						continue;
 					}
 
-					float y = -Mth.lerp(t, swirl.startYOffset, 0f);
+					float y = -Mth.lerp(lifeTime, swirl.startYOffset, 0f);
 					float yaw = swirl.yaw + swirl.spinSpeedDeg * partialTick;
 
 					poseStack.pushPose();
@@ -847,6 +847,29 @@ public class FountainRenderUtil {
 
 					poseStack.popPose();
 				}
+
+				Level level = Minecraft.getInstance().level;
+
+				if (level != null) {
+					float vortexYaw;
+
+					if (sealingTick >= 0) {
+						float vortexYawScale = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, DEPTHS_VORTEX_DEG_PER_TICK, 0);
+						vortexYaw = (level.getGameTime() + partialTick) * vortexYawScale;
+					} else {
+						vortexYaw = (level.getGameTime() + partialTick) * DEPTHS_VORTEX_DEG_PER_TICK;
+					}
+
+					poseStack.pushPose();
+
+					poseStack.translate(0f, DEPTHS_VORTEX_Y, 0f);
+					poseStack.mulPose(Axis.YP.rotationDegrees(vortexYaw));
+
+					renderDepthsHorizontalPlane(poseStack, buffer.getBuffer(RenderTypes.fountainNoCull(DEPTHS_VORTEX)),
+							DEPTHS_VORTEX_PIXELS / 16f, 0f, 1f, 1f, 1f, swirlDim);
+
+					poseStack.popPose();
+				}
 			}
 		}
 
@@ -854,11 +877,20 @@ public class FountainRenderUtil {
 	}
 
 	public static void renderDepthsFountainBeam(DarkFountain fountain, PoseStack poseStack, MultiBufferSource buffer, Camera camera, double distance2d) {
-		float dimming = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_MIN, 1.0);
+		float dimming = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_MIN, 1);
 		int sealingTick = fountain.sealingTick;
 
-		if (sealingTick > 0 && sealingTick < SEAL_DURATION) {
-			dimming = Mth.lerp((float) sealingTick / SEAL_DURATION, dimming, 0);
+		if (sealingTick >= 0 && sealingTick < DEPTHS_FADE_OUT_DURATION) {
+			dimming = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, dimming, 0);
+		}
+		if (sealingTick >= DEPTHS_FADE_OUT_DURATION && sealingTick < DEPTHS_FADE_IN_START) {
+			dimming = 0;
+		}
+		if (sealingTick >= DEPTHS_FADE_IN_START && sealingTick < DEPTHS_FADE_IN_END) {
+			dimming = Mth.lerp((float) sealingTick / DEPTHS_FADE_IN_END, 0, dimming);
+		}
+		if (sealingTick >= DEPTHS_FADE_OUT_FINAL_START) {
+			dimming = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_FINAL_END, dimming, 0);
 		}
 
 		poseStack.pushPose();

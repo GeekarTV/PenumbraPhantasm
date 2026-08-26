@@ -1,4 +1,4 @@
-package destiny.penumbra_phantasm.client.render;
+package destiny.penumbra_phantasm.client.render.fountain;
 
 import destiny.penumbra_phantasm.server.capability.DarkFountainCapability;
 import destiny.penumbra_phantasm.server.fountain.DarkFountain;
