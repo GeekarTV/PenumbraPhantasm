@@ -180,12 +180,6 @@ public class DarkFountain {
                         });
                     }
 
-                    if (openingTick >= 0) {
-                        if (openingTick < OPENING_FINISH) {
-                            openingTick++;
-                        }
-                    }
-
                     if (sealingTick >= 0) {
                         if (sealingTick < SEAL_DURATION + SEAL_FLASH_DELAY + SEAL_FLASH_DURATION + 40) {
                             sealingTick++;

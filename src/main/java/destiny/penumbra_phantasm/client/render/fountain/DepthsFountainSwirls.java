@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static destiny.penumbra_phantasm.client.render.fountain.FountainRenderUtil.DEPTHS_FADE_OUT_DURATION;
+
 public class DepthsFountainSwirls {
 	private static final Map<Long, List<Swirl>> BY_FOUNTAIN = new HashMap<>();
 	private static final int MAX_PER_FOUNTAIN = 40;
@@ -55,15 +57,27 @@ public class DepthsFountainSwirls {
 			long key = fountain.getFountainPos().asLong();
 			live.put(key, true);
 			List<Swirl> swirls = BY_FOUNTAIN.computeIfAbsent(key, k -> new ArrayList<>());
-			Iterator<Swirl> it = swirls.iterator();
+			Iterator<Swirl> iterator = swirls.iterator();
 
-			while (it.hasNext()) {
-				Swirl swirl = it.next();
-				swirl.age += 1f;
-				swirl.yaw += swirl.spinSpeedDeg;
+			while (iterator.hasNext()) {
+				Swirl swirl = iterator.next();
+
+				int sealingTick = fountain.sealingTick;
+
+				if (sealingTick < 0) {
+					swirl.age = swirl.age + 1f;
+				}
+
+				if (sealingTick >= 0) {
+					float sealDelta = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, 1, 0);
+
+					swirl.yaw = swirl.yaw + (swirl.spinSpeedDeg * sealDelta);
+				} else {
+					swirl.yaw = swirl.yaw + swirl.spinSpeedDeg;
+				}
 
 				if (swirl.age >= swirl.lifetime) {
-					it.remove();
+					iterator.remove();
 				}
 			}
 

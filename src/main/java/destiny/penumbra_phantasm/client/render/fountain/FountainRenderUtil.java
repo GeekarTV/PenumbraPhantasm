@@ -55,35 +55,35 @@ public class FountainRenderUtil {
 	public static final float FOUNTAIN_SCREEN_TINT_FADE_START = 24f;
 	public static final float FOUNTAIN_SCREEN_TINT_FADE_END = 16f;
 
-	private static final float COS45 = 0.70710678f;
+	public static final float COS45 = 0.70710678f;
 
-	private static final ResourceLocation DEPTHS_OPENING = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/depths/fountain_opening.png");
-	private static final ResourceLocation DEPTHS_SWIRL = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/depths/fountain_swirl_part.png");
-	private static final ResourceLocation DEPTHS_SWIRL_SMALL = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/depths/fountain_swirl_small_part.png");
-	private static final ResourceLocation DEPTHS_VORTEX = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/depths/fountain_vortex.png");
-	private static final float DEPTHS_OPENING_PIXELS = 128f;
-	private static final float DEPTHS_SWIRL_PIXELS = 256f;
-	private static final float DEPTHS_VORTEX_PIXELS = 512f;
+	public static final ResourceLocation DEPTHS_OPENING = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/depths/fountain_opening.png");
+	public static final ResourceLocation DEPTHS_SWIRL = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/depths/fountain_swirl_part.png");
+	public static final ResourceLocation DEPTHS_SWIRL_SMALL = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/depths/fountain_swirl_small_part.png");
+	public static final ResourceLocation DEPTHS_VORTEX = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/depths/fountain_vortex.png");
+	public static final float DEPTHS_OPENING_PIXELS = 128f;
+	public static final float DEPTHS_SWIRL_PIXELS = 256f;
+	public static final float DEPTHS_VORTEX_PIXELS = 512f;
 
-	private static final float DEPTHS_SWIRL_SIZE = 2f;
+	public static final float DEPTHS_SWIRL_SIZE = 2f;
 
-	private static final float DEPTHS_ALPHA_MIN = 0.25f;
-	private static final float DEPTHS_DIM_DISTANCE = 256;
+	public static final float DEPTHS_ALPHA_MIN = 0.25f;
+	public static final float DEPTHS_DIM_DISTANCE = 256;
 
-	private static final float DEPTHS_SWIRL_CULL_DISTANCE = 128f;
-	private static final float DEPTHS_SWIRL_FADE_START = 96f;
+	public static final float DEPTHS_SWIRL_CULL_DISTANCE = 128f;
+	public static final float DEPTHS_SWIRL_FADE_START = 96f;
 
-	private static final float DEPTHS_VORTEX_Y = 4f;
-	private static final float DEPTHS_VORTEX_DEG_PER_TICK = 6f;
+	public static final float DEPTHS_VORTEX_Y = 4f;
+	public static final float DEPTHS_VORTEX_DEG_PER_TICK = 6f;
 
-	private static final float DEPTHS_BEAM_TOP_WIDTH = 2f;
-	private static final float DEPTHS_BEAM_BOTTOM_WIDTH = 5f;
-	private static final float DEPTHS_BEAM_LENGTH = 48f;
+	public static final float DEPTHS_BEAM_TOP_WIDTH = 2f;
+	public static final float DEPTHS_BEAM_BOTTOM_WIDTH = 5f;
+	public static final float DEPTHS_BEAM_LENGTH = 48f;
 
-	private static final int DEPTHS_FADE_OUT_DURATION = SEAL_DURATION;
-	private static final int DEPTHS_FADE_IN_START = SEAL_DURATION + SEAL_FLASH_DELAY;
-	private static final int DEPTHS_FADE_IN_END = DEPTHS_FADE_IN_START + SEAL_FLASH_DURATION - (SEAL_FLASH_DURATION / 3);
-	private static final int DEPTHS_FADE_OUT_FINAL_END = DEPTHS_FADE_IN_START + SEAL_FLASH_DURATION;
+	public static final int DEPTHS_FADE_OUT_DURATION = SEAL_DURATION;
+	public static final int DEPTHS_FADE_IN_START = SEAL_DURATION + SEAL_FLASH_DELAY;
+	public static final int DEPTHS_FADE_IN_END = DEPTHS_FADE_IN_START + SEAL_FLASH_DURATION - (SEAL_FLASH_DURATION / 3);
+	public static final int DEPTHS_FADE_OUT_FINAL_END = DEPTHS_FADE_IN_START + SEAL_FLASH_DURATION;
 
 	public static float openingPosterizeLumaThresholdForCameraBlockLight(Level level, Vec3 cameraPos, float baseThreshold) {
 		int blockLight = level.getBrightness(LightLayer.BLOCK, BlockPos.containing(cameraPos));
@@ -799,8 +799,8 @@ public class FountainRenderUtil {
 		float openingSize = DEPTHS_OPENING_PIXELS;
 
 		if (sealingTick >= DEPTHS_FADE_IN_END && sealingTick < DEPTHS_FADE_OUT_FINAL_END) {
-			dimming = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - sealingTick), dimming, 0);
-			openingSize = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - sealingTick), DEPTHS_OPENING_PIXELS, 0);
+			dimming = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - DEPTHS_FADE_IN_END), dimming, 0);
+			openingSize = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - DEPTHS_FADE_IN_END), DEPTHS_OPENING_PIXELS, 0);
 		}
 		if (sealingTick >= DEPTHS_FADE_OUT_FINAL_END) {
 			dimming = 0;
@@ -836,7 +836,13 @@ public class FountainRenderUtil {
 						continue;
 					}
 
-					float size = (1f - lifeTime) * (DEPTHS_SWIRL_PIXELS / 16f) * DEPTHS_SWIRL_SIZE;
+					float baseSize = DEPTHS_SWIRL_SIZE;
+
+					if (sealingTick >= 0) {
+						baseSize = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, DEPTHS_SWIRL_SIZE, 6);
+					}
+
+					float size = (1f - lifeTime) * (DEPTHS_SWIRL_PIXELS / 16f) * baseSize;
 					if (size <= 0.01f) {
 						continue;
 					}
@@ -862,9 +868,11 @@ public class FountainRenderUtil {
 					float vortexYaw;
 
 					if (sealingTick >= 0) {
-						float vortexYawScale = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, 1, 0);
-						vortexYawScale = Mth.clamp(vortexYawScale, 0, 1);
-						vortexYaw = (level.getGameTime() + partialTick) * (DEPTHS_VORTEX_DEG_PER_TICK * vortexYawScale);
+						float sealingTicks = fountain.sealingTick + partialTick;
+						float sealingStartTime = level.getGameTime() - sealingTick;
+						float vortexYawSealStart = sealingStartTime * DEPTHS_VORTEX_DEG_PER_TICK;
+
+						vortexYaw = DEPTHS_VORTEX_DEG_PER_TICK * (vortexYawSealStart + sealingTicks - (sealingTicks * sealingTicks) / (2f * DEPTHS_FADE_OUT_DURATION));
 					} else {
 						vortexYaw = (level.getGameTime() + partialTick) * DEPTHS_VORTEX_DEG_PER_TICK;
 					}
@@ -898,13 +906,13 @@ public class FountainRenderUtil {
 			dimming = 0;
 		}
 		if (sealingTick >= DEPTHS_FADE_IN_START && sealingTick < DEPTHS_FADE_IN_END) {
-			dimming = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_START) / (DEPTHS_FADE_IN_END - sealingTick), 0, dimming);
-			bottomWidth = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_START) / (DEPTHS_FADE_IN_END - sealingTick), DEPTHS_BEAM_BOTTOM_WIDTH, 10);
+			dimming = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_START) / (DEPTHS_FADE_IN_END - DEPTHS_FADE_IN_START), 0, dimming);
+			bottomWidth = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_START) / (DEPTHS_FADE_IN_END - DEPTHS_FADE_IN_START), DEPTHS_BEAM_BOTTOM_WIDTH, 10);
 		}
 		if (sealingTick >= DEPTHS_FADE_IN_END && sealingTick < DEPTHS_FADE_OUT_FINAL_END) {
-			dimming = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - sealingTick), dimming, 0);
-			bottomWidth = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - sealingTick), 10, 0);
-			topWidth = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - sealingTick), DEPTHS_BEAM_TOP_WIDTH, 0);
+			dimming = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - DEPTHS_FADE_IN_END), dimming, 0);
+			bottomWidth = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - DEPTHS_FADE_IN_END), 10, 0);
+			topWidth = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - DEPTHS_FADE_IN_END), DEPTHS_BEAM_TOP_WIDTH, 0);
 		}
 		if (sealingTick >= DEPTHS_FADE_OUT_FINAL_END) {
 			dimming = 0;
