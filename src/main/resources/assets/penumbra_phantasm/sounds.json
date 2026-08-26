@@ -325,5 +325,17 @@
       "penumbra_phantasm:depths_thunder_2",
       "penumbra_phantasm:depths_thunder_3"
     ]
+  },
+  "fountain_make_depths": {
+    "sounds":
+    [
+      "penumbra_phantasm:fountain_make_depths"
+    ]
+  },
+  "fountain_seal_depths": {
+    "sounds":
+    [
+      "penumbra_phantasm:fountain_seal_depths"
+    ]
   }
 }

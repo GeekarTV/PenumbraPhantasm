@@ -529,23 +529,30 @@ public class KnifeItem extends SwordItem {
 
         darkCap.addDarkFountain(darkFountainPos, targetLevel.dimension(), fountainPos, level.dimension(), 0, 0, 0, 0, new HashSet<>(), new ArrayList<>(), -1, -1, 0);
 
+        //Depths fountain
         ServerLevel depths = DarkWorldUtil.getDepths(level.getServer());
         if (depths != null) {
             int depthsX = DarkFountain.scaledDepthsX(fountainPos.getX());
             int depthsZ = DarkFountain.scaledDepthsZ(fountainPos.getZ());
+
             if (DarkFountain.isDepthsXzOccupied(depths, depthsX, depthsZ)) {
                 lightCap.removeDarkFountain(level, fountainPos);
                 darkCap.removeDarkFountain(targetLevel, darkFountainPos);
+
                 player.displayClientMessage(Component.translatable("message.penumbra_phantasm.making_fountain_depths_conflict"), true);
                 resetMakingState(tag);
+
                 return;
             }
+
             BlockPos depthsFountainPos = DarkFountain.resolveDepthsFountainPos(depths, fountainPos);
             ResourceKey<Level> darkDimension = targetLevel.dimension();
+
             depths.getCapability(CapabilityRegistry.DARK_FOUNTAIN).ifPresent(depthsCap -> {
                 depthsCap.addDarkFountain(depthsFountainPos, depths.dimension(), darkFountainPos, darkDimension,
-                        -1, 0, 0, 0, new HashSet<>(), new ArrayList<>(), -1, -1, 0);
+                        0, 0, 0, 0, new HashSet<>(), new ArrayList<>(), -1, -1, 0);
             });
+
             DarkFountain darkFountain = darkCap.darkFountains.get(darkFountainPos);
             if (darkFountain != null) {
                 darkFountain.depthsPos = depthsFountainPos;

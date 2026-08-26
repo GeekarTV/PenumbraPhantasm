@@ -140,6 +140,10 @@ public class SealingSoulEntity extends Entity {
                 });
                 level.playSound(null, player.getOnPos().above(), SoundRegistry.FOUNTAIN_SEAL.get(), SoundSource.AMBIENT, 0.5f, 1f);
             });
+
+            depthsLevel.players().forEach(serverPlayer ->
+                    level.playSound(null, serverPlayer.getOnPos().above(), SoundRegistry.FOUNTAIN_SEAL_DEPTHS.get(),
+                            SoundSource.AMBIENT, 0.25f, 1f));
         }
 
         if (tick >= 7 * 20) {

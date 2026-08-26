@@ -174,8 +174,22 @@ public class DarkFountain {
                 if (level instanceof ServerLevel serverLevel) {
                     tickDepthsFountain(serverLevel);
 
-                    if (sealingTick < SEAL_DURATION + SEAL_FLASH_DELAY + SEAL_FLASH_DURATION + 40) {
-                        sealingTick++;
+                    if (openingTick == 1) {
+                        serverLevel.players().forEach(player -> {
+                            level.playSound(null, player.getOnPos().above(), SoundRegistry.FOUNTAIN_MAKE_DEPTHS.get(), SoundSource.AMBIENT, 0.75f, 1f);
+                        });
+                    }
+
+                    if (openingTick >= 0) {
+                        if (openingTick < OPENING_FINISH) {
+                            openingTick++;
+                        }
+                    }
+
+                    if (sealingTick >= 0) {
+                        if (sealingTick < SEAL_DURATION + SEAL_FLASH_DELAY + SEAL_FLASH_DURATION + 40) {
+                            sealingTick++;
+                        }
                     }
                 }
             } else {
