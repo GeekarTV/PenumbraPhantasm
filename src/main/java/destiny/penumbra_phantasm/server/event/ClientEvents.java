@@ -208,7 +208,7 @@ public class ClientEvents {
 							FountainRenderUtil.renderDepthsFountain(fountain, pose, buffer, camera, distance2d, partialTick, fade);
 						}
 						if (renderShockwavePass) {
-							FountainRenderUtil.renderDepthsFountainBeam(pose, buffer, camera, distance2d);
+							FountainRenderUtil.renderDepthsFountainBeam(fountain, pose, buffer, camera, distance2d);
 						}
 						pose.popPose();
 					} else if (renderSkyPass) {

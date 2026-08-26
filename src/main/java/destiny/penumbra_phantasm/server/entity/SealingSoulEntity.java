@@ -1,5 +1,6 @@
 package destiny.penumbra_phantasm.server.entity;
 
+import destiny.penumbra_phantasm.PenumbraPhantasm;
 import destiny.penumbra_phantasm.server.block.DarknessBlock;
 import destiny.penumbra_phantasm.server.capability.DarkFountainCapability;
 import destiny.penumbra_phantasm.server.fountain.DarkFountain;
@@ -8,11 +9,14 @@ import destiny.penumbra_phantasm.server.registry.CapabilityRegistry;
 import destiny.penumbra_phantasm.server.registry.SoundRegistry;
 import destiny.penumbra_phantasm.server.util.DarkWorldUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,7 +28,9 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -86,6 +92,25 @@ public class SealingSoulEntity extends Entity {
             return;
         }
 
+        Level depthsLevel = level.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, ResourceLocation.tryBuild(PenumbraPhantasm.MODID, "depths")));
+
+        DarkFountainCapability depthsFountainCapability = null;
+        LazyOptional<DarkFountainCapability> depthsFountainLazyCapability = depthsLevel.getCapability(CapabilityRegistry.DARK_FOUNTAIN);
+        if(depthsFountainLazyCapability.isPresent() && depthsFountainLazyCapability.resolve().isPresent())
+            depthsFountainCapability = depthsFountainLazyCapability.resolve().get();
+
+        if (depthsFountainCapability == null){
+            this.discard();
+            return;
+        }
+
+        DarkFountain depthsFountain = depthsFountainCapability.darkFountains.get(darkFountain.depthsPos);
+
+        if (depthsFountain == null){
+            this.discard();
+            return;
+        }
+
         if (tick == 0) {
             if (level instanceof ServerLevel serverLevel) {
                 ChunkPos soulChunk = new ChunkPos(getOnPos());
@@ -93,6 +118,8 @@ public class SealingSoulEntity extends Entity {
             }
             darkFountain.sealingTick = 0;
             darkFountain.sealingFrameTick = darkFountain.getFrameTick();
+            depthsFountain.sealingTick = 0;
+
             level.playSound(null, this.blockPosition(), SoundRegistry.GREAT_SHINE.get(), SoundSource.AMBIENT, 0.5f, 1f);
         }
         if (tick == 4 * 20 && !level.isClientSide) {

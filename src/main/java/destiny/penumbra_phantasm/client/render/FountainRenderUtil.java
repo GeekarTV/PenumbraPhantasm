@@ -29,6 +29,8 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
+import static destiny.penumbra_phantasm.server.fountain.DarkFountain.SEAL_DURATION;
+
 
 public class FountainRenderUtil {
 	public static float fountainHueAlpha = 0F;
@@ -465,7 +467,7 @@ public class FountainRenderUtil {
 
 	public static void renderSealingFountain(DarkFountain fountain, Level level, int length, ResourceLocation textureCrack, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int overlay, float alpha) {
 		int frame = fountain.getFrame();
-		float sealDelta = Mth.clamp((fountain.sealingTick + partialTick) / DarkFountain.SEAL_DURATION, 0f, 1f);
+		float sealDelta = Mth.clamp((fountain.sealingTick + partialTick) / SEAL_DURATION, 0f, 1f);
 		float middleUvOffset = getMiddleUvOffset(fountain, partialTick);
 
 		ResourceLocation textureBottom = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/fountain_bottom/fountain_bottom_0.png");
@@ -477,10 +479,10 @@ public class FountainRenderUtil {
 		float smoothGameTime = level.getGameTime() + partialTick;
 		float time = smoothGameTime * 0.1f;
 		float sealingTicks = fountain.sealingTick + partialTick;
-		float clampedSealingTicks = Mth.clamp(sealingTicks, 0f, DarkFountain.SEAL_DURATION);
+		float clampedSealingTicks = Mth.clamp(sealingTicks, 0f, SEAL_DURATION);
 		float basePulseSpeed = 1.2f;
 		float phaseAtSealStart = (smoothGameTime - fountain.sealingTick) * 0.1f * basePulseSpeed;
-		float decelPhase = basePulseSpeed * 0.1f * (clampedSealingTicks - (clampedSealingTicks * clampedSealingTicks) / (2f * DarkFountain.SEAL_DURATION));
+		float decelPhase = basePulseSpeed * 0.1f * (clampedSealingTicks - (clampedSealingTicks * clampedSealingTicks) / (2f * SEAL_DURATION));
 		float pulseMotion = (float) Math.sin(phaseAtSealStart + decelPhase);
 		long fountainKey = fountain.getFountainPos().asLong();
 		if (sealDelta >= 1f) {
@@ -506,7 +508,7 @@ public class FountainRenderUtil {
 		ShaderInstance shaderInstance = ModShaders.FOUNTAIN_MASKED;
 		if (shaderInstance != null) {
 			float baseShaderSpeed = 0.05f;
-			float shadertime = (smoothGameTime - fountain.sealingTick) * baseShaderSpeed - baseShaderSpeed * (clampedSealingTicks * clampedSealingTicks) / (2f * DarkFountain.SEAL_DURATION);
+			float shadertime = (smoothGameTime - fountain.sealingTick) * baseShaderSpeed - baseShaderSpeed * (clampedSealingTicks * clampedSealingTicks) / (2f * SEAL_DURATION);
 			if (sealDelta >= 1f) {
 				float currentShaderTime = shadertime;
 				shadertime = sealedShaderTimeByFountain.computeIfAbsent(fountainKey, k -> currentShaderTime);
@@ -582,7 +584,7 @@ public class FountainRenderUtil {
 				LightTexture.FULL_BRIGHT, overlay, frontColor.getRed() / 255f, frontColor.getGreen() / 255f, frontColor.getBlue() / 255f, alpha);
 		poseStack.popPose();
 
-		if (fountain.sealingTick < DarkFountain.SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
+		if (fountain.sealingTick < SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
 			poseStack.pushPose();
 			poseStack.translate(0.5f, 0.5f, 0.5f);
 			poseStack.translate(0f, 7 - (4 * pixel), 0f);
@@ -595,10 +597,10 @@ public class FountainRenderUtil {
 			poseStack.popPose();
 		}
 
-		if (fountain.sealingTick >= DarkFountain.SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
+		if (fountain.sealingTick >= SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
 			ResourceLocation textureMiddleSealing = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/fountain_middle/sealing/fountain_middle_0.png");
 			ResourceLocation textureBottomSealing = new ResourceLocation(PenumbraPhantasm.MODID, "textures/fountain/fountain_bottom/fountain_bottom_sealing.png");
-			float sealingFlashTick = fountain.sealingTick - (DarkFountain.SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY);
+			float sealingFlashTick = fountain.sealingTick - (SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY);
 			float flashDelta = Mth.clamp((sealingFlashTick + partialTick) / DarkFountain.SEAL_FLASH_DURATION, 0f, 1f);
 			float edgePulseDelta = Mth.clamp((sealingFlashTick + partialTick) / (DarkFountain.SEAL_FLASH_DURATION / 2f), 0f, 1f);
 			float edgePulse = Mth.lerp(edgePulseDelta, pulse, 1f);
@@ -702,7 +704,7 @@ public class FountainRenderUtil {
 		poseStack.pushPose();
 		poseStack.translate(0.5f, 0.74f, 0.5f);
 		poseStack.scale(1.0f, 1.0f, 1.0f);
-		if (fountain.sealingTick < DarkFountain.SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
+		if (fountain.sealingTick < SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
 			renderFountainCross(poseStack, buffer.getBuffer(RenderTypes.fountainMaskedPortal(textureMiddle, imageDepth, depthWrite)),
 					middleEdgesColor.getRed() / 255f, middleEdgesColor.getGreen() / 255f, middleEdgesColor.getBlue() / 255f, alpha,
 					48f, 140f, length, 0.1f, middleUvOffset);
@@ -716,7 +718,7 @@ public class FountainRenderUtil {
 		poseStack.translate(0.5f, 0.74f, 0.5f);
 		poseStack.scale(1.0f, 1.0f, 1.0f);
 		poseStack.scale(pulse, 1.0f, pulse);
-		if (fountain.sealingTick < DarkFountain.SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
+		if (fountain.sealingTick < SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
 			renderFountainCross(poseStack, buffer.getBuffer(RenderTypes.fountainMaskedPortal(textureMiddle, imageDepth, depthWrite)),
 					backColor.getRed() / 255f, backColor.getGreen() / 255f, backColor.getBlue() / 255f, alpha,
 					48f, 140f, length, 0.0f, middleUvOffset);
@@ -730,7 +732,7 @@ public class FountainRenderUtil {
 		poseStack.translate(0.5f, 0.74f, 0.5f);
 		poseStack.scale(1.0f, 1.0f, 1.0f);
 		poseStack.scale(pulseFront, 1.0f, pulseFront);
-		if (fountain.sealingTick < DarkFountain.SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
+		if (fountain.sealingTick < SEAL_DURATION + DarkFountain.SEAL_FLASH_DELAY) {
 			renderFountainCross(poseStack, buffer.getBuffer(RenderTypes.fountainMaskedPortal(textureMiddle, imageDepth, depthWrite)),
 					frontColor.getRed() / 255f, frontColor.getGreen() / 255f, frontColor.getBlue() / 255f, alpha,
 					48f, 140f, length, 0.2f, middleUvOffset);
@@ -851,11 +853,17 @@ public class FountainRenderUtil {
 		poseStack.popPose();
 	}
 
-	public static void renderDepthsFountainBeam(PoseStack poseStack, MultiBufferSource buffer, Camera camera, double distance2d) {
-		float dim = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_MIN, 1.0);
+	public static void renderDepthsFountainBeam(DarkFountain fountain, PoseStack poseStack, MultiBufferSource buffer, Camera camera, double distance2d) {
+		float dimming = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_MIN, 1.0);
+		int sealingTick = fountain.sealingTick;
+
+		if (sealingTick > 0 && sealingTick < SEAL_DURATION) {
+			dimming = Mth.lerp((float) sealingTick / SEAL_DURATION, dimming, 0);
+		}
+
 		poseStack.pushPose();
 		poseStack.translate(0.5f, 0.5f, 0.5f);
-		renderDepthsBeam(poseStack, buffer.getBuffer(RenderTypes.fountainBeam()), camera, dim);
+		renderDepthsBeam(poseStack, buffer.getBuffer(RenderTypes.fountainBeam()), camera, dimming);
 		poseStack.popPose();
 	}
 

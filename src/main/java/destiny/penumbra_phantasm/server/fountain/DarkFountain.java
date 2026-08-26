@@ -173,6 +173,10 @@ public class DarkFountain {
             } else if (DarkWorldUtil.isDepths(level)) {
                 if (level instanceof ServerLevel serverLevel) {
                     tickDepthsFountain(serverLevel);
+
+                    if (sealingTick < SEAL_DURATION + SEAL_FLASH_DELAY + SEAL_FLASH_DURATION + 40) {
+                        sealingTick++;
+                    }
                 }
             } else {
                 if (level instanceof ServerLevel serverLevel) {
