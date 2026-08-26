@@ -69,9 +69,9 @@ public class DepthsFountainSwirls {
 				}
 
 				if (sealingTick >= 0) {
-					float sealDelta = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, 1, 0);
+					float sealDelta = 1f - (float) sealingTick / DEPTHS_FADE_OUT_DURATION;
 
-					swirl.yaw = swirl.yaw + (swirl.spinSpeedDeg * sealDelta);
+					swirl.yaw = swirl.yaw + swirl.spinSpeedDeg * sealDelta;
 				} else {
 					swirl.yaw = swirl.yaw + swirl.spinSpeedDeg;
 				}

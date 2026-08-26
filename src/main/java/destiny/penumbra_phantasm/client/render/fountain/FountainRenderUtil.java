@@ -848,7 +848,14 @@ public class FountainRenderUtil {
 					}
 
 					float y = -Mth.lerp(lifeTime, swirl.startYOffset, 0f);
-					float yaw = swirl.yaw + swirl.spinSpeedDeg * partialTick;
+					float yaw;
+
+					if (sealingTick > 0) {
+						float sealDelta = (sealingTick + partialTick) / DEPTHS_FADE_OUT_DURATION;
+						yaw = swirl.yaw + swirl.spinSpeedDeg * (1 - sealDelta) * partialTick;
+					} else {
+						yaw = swirl.yaw + swirl.spinSpeedDeg * partialTick;
+					}
 
 					poseStack.pushPose();
 
