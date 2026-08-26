@@ -172,7 +172,9 @@ public class DarkFountain {
                 }
             } else if (DarkWorldUtil.isDepths(level)) {
                 if (level instanceof ServerLevel serverLevel) {
-                    tickDepthsFountain(serverLevel);
+                    if (sealingTick < 0 && openingTick < 0) {
+                        tickDepthsFountain(serverLevel);
+                    }
 
                     if (openingTick == 1) {
                         serverLevel.players().forEach(player -> {

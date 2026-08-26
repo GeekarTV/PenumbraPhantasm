@@ -493,6 +493,7 @@
   "message.penumbra_phantasm.fire_door_limit_reached": "Can't save any more fire doors in this dark world...",
   "message.penumbra_phantasm.fire_door_not_enough_doors": "Nowhere to warp to...",
   "message.penumbra_phantasm.fire_door_not_in_dark_world": "But the handle wouldn't budge... (Not in a dark world)",
+  "message.penumbra_phantasm.fire_door_depths": "But the handle wouldn't budge... (Cannot use in The Depths)",
 
   "death.attack.penumbra_phantasm.injection_prick": "%1$s couldn't survive an injection",
   "death.attack.penumbra_phantasm.injection_prick.player": "%1$s was injected to death by %2$s",
