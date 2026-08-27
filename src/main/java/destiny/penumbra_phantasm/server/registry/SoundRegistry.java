@@ -72,6 +72,7 @@ public class SoundRegistry {
     public static RegistryObject<SoundEvent> DEPTHS_THUNDER = registerSoundEvent("depths_thunder");
     public static RegistryObject<SoundEvent> FOUNTAIN_MAKE_DEPTHS = registerSoundEvent("fountain_make_depths");
     public static RegistryObject<SoundEvent> FOUNTAIN_SEAL_DEPTHS = registerSoundEvent("fountain_seal_depths");
+    public static RegistryObject<SoundEvent> FOUNTAIN_MUSIC_DEPTHS = registerSoundEvent("fountain_music_depths");
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String sound)
     {

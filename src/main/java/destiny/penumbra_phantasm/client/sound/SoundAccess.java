@@ -1,8 +1,7 @@
 package destiny.penumbra_phantasm.client.sound;
 
-import destiny.penumbra_phantasm.ServerConfig;
 import destiny.penumbra_phantasm.PenumbraPhantasm;
-import destiny.penumbra_phantasm.client.ClientConfig;
+import destiny.penumbra_phantasm.client.sound.fountain_wind.DarkFountainSoundWrapper;
 import destiny.penumbra_phantasm.server.fountain.DarkFountain;
 import destiny.penumbra_phantasm.server.registry.CapabilityRegistry;
 import destiny.penumbra_phantasm.server.registry.SoundRegistry;
@@ -21,6 +20,10 @@ public class SoundAccess {
 
     public static SoundEvent getFountainMusic() {
         return SoundRegistry.FOUNTAIN_MUSIC.get();
+    }
+
+    public static SoundEvent getFountainMusicDepths() {
+        return SoundRegistry.FOUNTAIN_MUSIC_DEPTHS.get();
     }
 
     public static void playFountainWind(BlockPos fountainPos, boolean stop)

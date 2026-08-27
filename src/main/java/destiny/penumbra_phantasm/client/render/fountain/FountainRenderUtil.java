@@ -828,7 +828,7 @@ public class FountainRenderUtil {
 				swirlDim = 0;
 			}
 			if (openingTick >= openingShadowDurationFull && openingTick < OPENING_FINISH) {
-				swirlDim = Mth.lerp((float) openingTick - openingShadowDurationFull / OPENING_FINISH, 0, swirlDim);
+				swirlDim = Mth.lerp((openingTick - openingShadowDurationFull) / OPENING_FINISH, 0, swirlDim);
 			}
 
 			if (sealingTick >= 0 && sealingTick < DEPTHS_FADE_OUT_DURATION) {
@@ -851,6 +851,13 @@ public class FountainRenderUtil {
 					}
 
 					float baseSize = DEPTHS_SWIRL_SIZE;
+
+					if (openingTick >= 0 && openingTick < openingShadowDurationFull) {
+						baseSize = 0;
+					}
+					if (openingTick >= openingShadowDurationFull && openingTick < OPENING_FINISH) {
+						baseSize = Mth.lerp((openingTick - openingShadowDurationFull) / OPENING_FINISH, 6, DEPTHS_SWIRL_SIZE);
+					}
 
 					if (sealingTick >= 0) {
 						baseSize = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, DEPTHS_SWIRL_SIZE, 6);
@@ -942,16 +949,16 @@ public class FountainRenderUtil {
 				beamBottomWidth = DEPTHS_BEAM_BOTTOM_WIDTH * 2;
 			}
 			if (openingTick >= OPENING_SHADOW_FADE_START && openingTick < OPENING_SHADOW_FADE_DURATION + OPENING_SHADOW_FADE_START) {
-				pulseScale = Mth.lerp((openingTick - OPENING_SHADOW_FADE_START) / (OPENING_SHADOW_FADE_DURATION + OPENING_SHADOW_FADE_START),
+				pulseScale = Mth.lerp((openingTick - OPENING_SHADOW_FADE_START) / (OPENING_SHADOW_FADE_DURATION),
 						1, 0);
-				beamBottomWidth = Mth.lerp((openingTick - OPENING_SHADOW_FADE_START) / (OPENING_SHADOW_FADE_DURATION + OPENING_SHADOW_FADE_START),
+				beamBottomWidth = Mth.lerp((openingTick - OPENING_SHADOW_FADE_START) / (OPENING_SHADOW_FADE_DURATION),
 						DEPTHS_BEAM_BOTTOM_WIDTH * 2, DEPTHS_BEAM_BOTTOM_WIDTH);
 			}
 
-			float pulseAmp = 0.075f;
+			float pulseAmp = 0.1f;
 			float pulse = 1f + pulseAmp * (float) Math.sin(openingTick * OPENING_PULSE_FREQ);
 
-			bottomWidth = beamBottomWidth * (pulse * pulseScale);
+			bottomWidth = beamBottomWidth + beamBottomWidth * (pulse * pulseScale);
 		}
 
 		if (sealingTick >= 0 && sealingTick < DEPTHS_FADE_OUT_DURATION) {

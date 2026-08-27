@@ -1,4 +1,4 @@
-package destiny.penumbra_phantasm.client.sound;
+package destiny.penumbra_phantasm.client.sound.fountain_wind;
 
 import destiny.penumbra_phantasm.server.fountain.DarkFountain;
 import destiny.penumbra_phantasm.server.util.DarkWorldUtil;
@@ -9,7 +9,6 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 public class DarkFountainSound<T extends DarkFountain> extends AbstractTickableSoundInstance {

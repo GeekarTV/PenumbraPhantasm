@@ -55,8 +55,6 @@ public class TenebralithSpikeFeature extends Feature<PointedDripstoneConfigurati
         if (isTenebralithBase(pLevel.getBlockState(pPos.relative(pDirection.getOpposite())))) {
             BlockPos.MutableBlockPos mutablePos = pPos.mutable();
 
-            System.out.println("Trying to grow");
-
             buildBaseToTipColumn(pDirection, pHeight, pMergeTip, (state) -> {
                 if (state.is(BlockRegistry.TENEBRALITH_SPIKE.get())) {
                     state = state.setValue(PointedDripstoneBlock.WATERLOGGED, pLevel.isWaterAt(mutablePos));

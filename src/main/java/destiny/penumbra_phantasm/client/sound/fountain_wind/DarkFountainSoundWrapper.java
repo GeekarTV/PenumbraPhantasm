@@ -1,5 +1,7 @@
-package destiny.penumbra_phantasm.client.sound;
+package destiny.penumbra_phantasm.client.sound.fountain_wind;
 
+import destiny.penumbra_phantasm.client.sound.SoundAccess;
+import destiny.penumbra_phantasm.client.sound.SoundWrapper;
 import destiny.penumbra_phantasm.server.fountain.DarkFountain;
 import net.minecraft.client.Minecraft;
 

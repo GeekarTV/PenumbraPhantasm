@@ -29,8 +29,9 @@ import java.util.Map;
 
 public class MusicManager {
     public static final MusicManager INSTANCE = new MusicManager();
-    public static final float MUSIC_VOLUME = 0.2F;
-    public static final double FOUNTAIN_MUSIC_RANGE = 24.0;
+    public static final float MUSIC_VOLUME = 0.2f;
+    public static final double FOUNTAIN_MUSIC_RANGE = 24;
+    public static final double FOUNTAIN_MUSIC_DEPTHS_RANGE = 96;
 
     public final Minecraft minecraft = Minecraft.getInstance();
     public final Map<ResourceLocation, BiomeMusic> biomeMusicMap = new HashMap<>();
@@ -356,10 +357,6 @@ public class MusicManager {
         DarkFountainCapability cap = lazyCap.resolve().orElse(null);
         if (cap == null) return null;
 
-        if (DarkWorldUtil.isDepths(level)) {
-            return null;
-        }
-
         for (Map.Entry<BlockPos, DarkFountain> entry : cap.darkFountains.entrySet()) {
             DarkFountain fountain = entry.getValue();
             if (fountain.openingTick != -1) continue;
@@ -371,13 +368,21 @@ public class MusicManager {
             if (!DarkWorldUtil.isDarkWorld(minecraft.level)) {
                 distance = fountainPos.getCenter().distanceTo(playerPos);
             } else {
-                if (playerPos.y < fountainPos.getY()) {
+                if (DarkWorldUtil.isDepths(level)) {
                     distance = fountainPos.getCenter().distanceTo(playerPos);
-                } else {
-                    Vec3 playerPos2d = new Vec3(playerPos.x, 0f, playerPos.z);
-                    Vec3 fountainPos2d = new Vec3(fountainPos.getX(), 0, fountainPos.getZ());
 
-                    distance = fountainPos2d.distanceTo(playerPos2d);
+                    if (distance <= FOUNTAIN_MUSIC_DEPTHS_RANGE) {
+                        return SoundAccess.getFountainMusicDepths();
+                    }
+                } else {
+                    if (playerPos.y < fountainPos.getY()) {
+                        distance = fountainPos.getCenter().distanceTo(playerPos);
+                    } else {
+                        Vec3 playerPos2d = new Vec3(playerPos.x, 0f, playerPos.z);
+                        Vec3 fountainPos2d = new Vec3(fountainPos.getX(), 0, fountainPos.getZ());
+
+                        distance = fountainPos2d.distanceTo(playerPos2d);
+                    }
                 }
             }
 

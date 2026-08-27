@@ -337,5 +337,11 @@
     [
       "penumbra_phantasm:fountain_seal_depths"
     ]
+  },
+  "fountain_music_depths": {
+    "sounds":
+    [
+      "penumbra_phantasm:fountain_music_depths"
+    ]
   }
 }
