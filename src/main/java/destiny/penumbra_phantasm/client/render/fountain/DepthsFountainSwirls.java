@@ -13,7 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static destiny.penumbra_phantasm.client.render.fountain.FountainRenderUtil.DEPTHS_FADE_OUT_DURATION;
+import static destiny.penumbra_phantasm.client.render.fountain.FountainRenderUtil.*;
+import static destiny.penumbra_phantasm.server.fountain.DarkFountain.OPENING_FINISH;
 
 public class DepthsFountainSwirls {
 	private static final Map<Long, List<Swirl>> BY_FOUNTAIN = new HashMap<>();
@@ -62,13 +63,18 @@ public class DepthsFountainSwirls {
 			while (iterator.hasNext()) {
 				Swirl swirl = iterator.next();
 
+				int openingTick = fountain.openingTick;
 				int sealingTick = fountain.sealingTick;
 
 				if (sealingTick < 0) {
 					swirl.age = swirl.age + 1f;
 				}
 
-				if (sealingTick >= 0) {
+				if (openingTick >= OPENING_SHADOW_DURATION_FULL && openingTick < OPENING_FINISH) {
+					float openDelta = (openingTick - OPENING_SHADOW_DURATION_FULL) / (OPENING_FINISH - OPENING_SHADOW_DURATION_FULL);
+
+					swirl.yaw = swirl.yaw + swirl.spinSpeedDeg * openDelta;
+				} else if (sealingTick >= 0) {
 					float sealDelta = 1f - (float) sealingTick / DEPTHS_FADE_OUT_DURATION;
 
 					swirl.yaw = swirl.yaw + swirl.spinSpeedDeg * sealDelta;

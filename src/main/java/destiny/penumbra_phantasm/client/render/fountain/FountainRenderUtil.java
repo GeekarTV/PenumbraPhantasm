@@ -39,8 +39,9 @@ public class FountainRenderUtil {
 
 	public static final float OPENING_SHADOW_FADE_START = 70f;
 	public static final float OPENING_SHADOW_FADE_DURATION = 20f;
+	public static final float OPENING_SHADOW_DURATION_FULL = OPENING_SHADOW_FADE_START + OPENING_SHADOW_FADE_DURATION;
 	public static final float OPENING_POSTERIZE_SHADOW_FADE_TAIL = 4f;
-	public static final float OPENING_PULSE_FREQ = 2.0f;
+	public static final float OPENING_PULSE_FREQ = 2f;
 
 	public static final int OPENING_POSTERIZE_STRENGTH_FADE_IN = 10;
 	public static final int OPENING_POSTERIZE_TICK_END = 130;
@@ -822,13 +823,11 @@ public class FountainRenderUtil {
 		if (distance2d < DEPTHS_SWIRL_CULL_DISTANCE) {
 			float swirlDim = (float) Mth.clamp(1.0 - (distance2d - DEPTHS_SWIRL_FADE_START) / (DEPTHS_SWIRL_CULL_DISTANCE - DEPTHS_SWIRL_FADE_START), 0, 1);
 
-			float openingShadowDurationFull = OPENING_SHADOW_FADE_START + OPENING_SHADOW_FADE_DURATION;
-
-			if (openingTick >= 0 && openingTick < openingShadowDurationFull) {
+			if (openingTick >= 0 && openingTick < OPENING_SHADOW_DURATION_FULL) {
 				swirlDim = 0;
 			}
-			if (openingTick >= openingShadowDurationFull && openingTick < OPENING_FINISH) {
-				swirlDim = Mth.lerp((openingTick - openingShadowDurationFull) / (OPENING_FINISH - openingShadowDurationFull), 0, swirlDim);
+			if (openingTick >= OPENING_SHADOW_DURATION_FULL && openingTick < OPENING_FINISH) {
+				swirlDim = Mth.lerp((openingTick - OPENING_SHADOW_DURATION_FULL) / (OPENING_FINISH - OPENING_SHADOW_DURATION_FULL), 0, swirlDim);
 			}
 
 			if (sealingTick >= 0 && sealingTick < DEPTHS_FADE_OUT_DURATION) {
@@ -852,11 +851,11 @@ public class FountainRenderUtil {
 
 					float baseSize = DEPTHS_SWIRL_SIZE;
 
-					if (openingTick >= 0 && openingTick < openingShadowDurationFull) {
+					if (openingTick >= 0 && openingTick < OPENING_SHADOW_DURATION_FULL) {
 						baseSize = 0;
 					}
-					if (openingTick >= openingShadowDurationFull && openingTick < OPENING_FINISH) {
-						baseSize = Mth.lerp((openingTick - openingShadowDurationFull) / (OPENING_FINISH - openingShadowDurationFull), 6, DEPTHS_SWIRL_SIZE);
+					if (openingTick >= OPENING_SHADOW_DURATION_FULL && openingTick < OPENING_FINISH) {
+						baseSize = Mth.lerp((openingTick - OPENING_SHADOW_DURATION_FULL) / (OPENING_FINISH - OPENING_SHADOW_DURATION_FULL), 6, DEPTHS_SWIRL_SIZE);
 					}
 
 					if (sealingTick >= 0) {
@@ -871,8 +870,13 @@ public class FountainRenderUtil {
 					float y = -Mth.lerp(lifeTime, swirl.startYOffset, 0f);
 					float yaw;
 
-					if (sealingTick > 0) {
+					if (openingTick >= OPENING_SHADOW_DURATION_FULL && openingTick < OPENING_FINISH) {
+						float openDelta = (openingTick + partialTick - OPENING_SHADOW_DURATION_FULL) / (OPENING_FINISH - OPENING_SHADOW_DURATION_FULL);
+
+						yaw = swirl.yaw + swirl.spinSpeedDeg * openDelta * partialTick;
+					} else if (sealingTick > 0) {
 						float sealDelta = (sealingTick + partialTick) / DEPTHS_FADE_OUT_DURATION;
+
 						yaw = swirl.yaw + swirl.spinSpeedDeg * (1 - sealDelta) * partialTick;
 					} else {
 						yaw = swirl.yaw + swirl.spinSpeedDeg * partialTick;
@@ -896,13 +900,11 @@ public class FountainRenderUtil {
 					float vortexYaw = (level.getGameTime() + partialTick) * DEPTHS_VORTEX_DEG_PER_TICK;
 					float vortexSize = DEPTHS_VORTEX_PIXELS;
 
-					if (openingTick >= openingShadowDurationFull) {
-						float openingTicks = fountain.openingTick - openingShadowDurationFull + partialTick;
-						float openingStartTime = level.getGameTime() - openingTick;
-						float vortexYawOpeningStart = openingStartTime * DEPTHS_VORTEX_DEG_PER_TICK;
+					if (openingTick >= OPENING_SHADOW_DURATION_FULL && openingTick < OPENING_FINISH) {
+						float openingTicks = (fountain.openingTick - OPENING_SHADOW_DURATION_FULL) + partialTick;
 
-						vortexYaw = DEPTHS_VORTEX_DEG_PER_TICK * (vortexYawOpeningStart + openingTicks + (openingTicks * openingTicks) / (2f * openingShadowDurationFull - OPENING_FINISH));
-						vortexSize = Mth.lerp((openingTick - openingShadowDurationFull) / (OPENING_FINISH - openingShadowDurationFull), DEPTHS_VORTEX_PIXELS * 3, DEPTHS_VORTEX_PIXELS);
+						vortexYaw = DEPTHS_VORTEX_DEG_PER_TICK * ((openingTicks * openingTicks) / (2f * (OPENING_FINISH - OPENING_SHADOW_DURATION_FULL)));
+						vortexSize = Mth.lerp((openingTick - OPENING_SHADOW_DURATION_FULL) / (OPENING_FINISH - OPENING_SHADOW_DURATION_FULL), DEPTHS_VORTEX_PIXELS * 3, DEPTHS_VORTEX_PIXELS);
 					}
 
 					if (sealingTick >= 0) {
