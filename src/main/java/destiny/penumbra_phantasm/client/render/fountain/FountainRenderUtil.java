@@ -795,8 +795,13 @@ public class FountainRenderUtil {
 
 	public static void renderDepthsFountain(DarkFountain fountain, PoseStack poseStack, MultiBufferSource buffer, Camera camera, double distance2d, float partialTick, float lodFade) {
 		float dimming = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_MIN, 1.0);
+		int openingTick = fountain.openingTick;
 		int sealingTick = fountain.sealingTick;
 		float openingSize = DEPTHS_OPENING_PIXELS;
+
+		if (openingTick >= 0 && openingTick < 5) {
+			openingSize = Mth.lerp((float) openingTick / 5, 0, DEPTHS_OPENING_PIXELS);
+		}
 
 		if (sealingTick >= DEPTHS_FADE_IN_END && sealingTick < DEPTHS_FADE_OUT_FINAL_END) {
 			dimming = Mth.lerp((float) (sealingTick - DEPTHS_FADE_IN_END) / (DEPTHS_FADE_OUT_FINAL_END - DEPTHS_FADE_IN_END), dimming, 0);
@@ -816,6 +821,15 @@ public class FountainRenderUtil {
 
 		if (distance2d < DEPTHS_SWIRL_CULL_DISTANCE) {
 			float swirlDim = (float) Mth.clamp(1.0 - (distance2d - DEPTHS_SWIRL_FADE_START) / (DEPTHS_SWIRL_CULL_DISTANCE - DEPTHS_SWIRL_FADE_START), 0, 1);
+
+			float openingShadowDurationFull = OPENING_SHADOW_FADE_START + OPENING_SHADOW_FADE_DURATION;
+
+			if (openingTick >= 0 && openingTick < openingShadowDurationFull) {
+				swirlDim = 0;
+			}
+			if (openingTick >= openingShadowDurationFull && openingTick < OPENING_FINISH) {
+				swirlDim = Mth.lerp((float) openingTick - openingShadowDurationFull / OPENING_FINISH, 0, swirlDim);
+			}
 
 			if (sealingTick >= 0 && sealingTick < DEPTHS_FADE_OUT_DURATION) {
 				swirlDim = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, swirlDim, 0);
@@ -872,7 +886,15 @@ public class FountainRenderUtil {
 				Level level = Minecraft.getInstance().level;
 
 				if (level != null) {
-					float vortexYaw;
+					float vortexYaw = (level.getGameTime() + partialTick) * DEPTHS_VORTEX_DEG_PER_TICK;
+
+					if (openingTick >= openingShadowDurationFull) {
+						float openingTicks = fountain.openingTick + partialTick;
+						float openingStartTime = level.getGameTime() - openingTick;
+						float vortexYawOpeningStart = openingStartTime * DEPTHS_VORTEX_DEG_PER_TICK;
+
+						vortexYaw = DEPTHS_VORTEX_DEG_PER_TICK * (vortexYawOpeningStart + openingTicks + (openingTicks * openingTicks) / (2f * OPENING_FINISH));
+					}
 
 					if (sealingTick >= 0) {
 						float sealingTicks = fountain.sealingTick + partialTick;
@@ -880,8 +902,6 @@ public class FountainRenderUtil {
 						float vortexYawSealStart = sealingStartTime * DEPTHS_VORTEX_DEG_PER_TICK;
 
 						vortexYaw = DEPTHS_VORTEX_DEG_PER_TICK * (vortexYawSealStart + sealingTicks - (sealingTicks * sealingTicks) / (2f * DEPTHS_FADE_OUT_DURATION));
-					} else {
-						vortexYaw = (level.getGameTime() + partialTick) * DEPTHS_VORTEX_DEG_PER_TICK;
 					}
 
 					poseStack.pushPose();
@@ -903,8 +923,36 @@ public class FountainRenderUtil {
 	public static void renderDepthsFountainBeam(DarkFountain fountain, PoseStack poseStack, MultiBufferSource buffer, Camera camera, double distance2d) {
 		float dimming = (float) Mth.clamp(DEPTHS_DIM_DISTANCE / Math.max(distance2d, DEPTHS_DIM_DISTANCE), DEPTHS_ALPHA_MIN, 1);
 		int sealingTick = fountain.sealingTick;
+		int openingTick = fountain.openingTick;
 		float bottomWidth = DEPTHS_BEAM_BOTTOM_WIDTH;
 		float topWidth = DEPTHS_BEAM_TOP_WIDTH;
+
+		if (openingTick >= 0 && openingTick < OPENING_SHADOW_FADE_START + OPENING_SHADOW_FADE_DURATION) {
+			float pulseScale = 0;
+			float beamBottomWidth = DEPTHS_BEAM_BOTTOM_WIDTH;
+
+			if (openingTick < 5) {
+				pulseScale = Mth.lerp((float) openingTick / 5, 0, 1);
+				beamBottomWidth = Mth.lerp((float) openingTick / 5, 0, DEPTHS_BEAM_BOTTOM_WIDTH * 2);
+				topWidth = Mth.lerp((float) openingTick / 5, 0, DEPTHS_BEAM_TOP_WIDTH);
+				dimming = Mth.lerp((float) openingTick / 5, 0, dimming);
+			}
+			if (openingTick >= 5 && openingTick < OPENING_SHADOW_FADE_START) {
+				pulseScale = 1;
+				beamBottomWidth = DEPTHS_BEAM_BOTTOM_WIDTH * 2;
+			}
+			if (openingTick >= OPENING_SHADOW_FADE_START && openingTick < OPENING_SHADOW_FADE_DURATION + OPENING_SHADOW_FADE_START) {
+				pulseScale = Mth.lerp((openingTick - OPENING_SHADOW_FADE_START) / (OPENING_SHADOW_FADE_DURATION + OPENING_SHADOW_FADE_START),
+						1, 0);
+				beamBottomWidth = Mth.lerp((openingTick - OPENING_SHADOW_FADE_START) / (OPENING_SHADOW_FADE_DURATION + OPENING_SHADOW_FADE_START),
+						DEPTHS_BEAM_BOTTOM_WIDTH * 2, DEPTHS_BEAM_BOTTOM_WIDTH);
+			}
+
+			float pulseAmp = 0.075f;
+			float pulse = 1f + pulseAmp * (float) Math.sin(openingTick * OPENING_PULSE_FREQ);
+
+			bottomWidth = beamBottomWidth * (pulse * pulseScale);
+		}
 
 		if (sealingTick >= 0 && sealingTick < DEPTHS_FADE_OUT_DURATION) {
 			dimming = Mth.lerp((float) sealingTick / DEPTHS_FADE_OUT_DURATION, dimming, 0);

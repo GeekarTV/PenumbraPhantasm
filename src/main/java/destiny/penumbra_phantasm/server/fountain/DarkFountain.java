@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.portal.PortalInfo;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.common.util.LazyOptional;
@@ -67,7 +68,7 @@ public class DarkFountain {
     public static final int SEAL_FLASH_DELAY = 20;
     public static final int SEAL_FLASH_DURATION = 30;
 
-    public static final int DEPTHS_XZ_SCALE = 4;
+    public static final int DEPTHS_XZ_SCALE = -10;
     public static final int DEPTHS_FOUNTAIN_Y_OFFSET = 64;
 
     public static final double DEPTHS_PIERCE_XZ = 1;
@@ -1187,9 +1188,10 @@ public class DarkFountain {
     public static boolean isDepthsXzOccupied(ServerLevel depths, int depthsX, int depthsZ) {
         return depths.getCapability(CapabilityRegistry.DARK_FOUNTAIN).map(cap -> {
             for (DarkFountain fountain : cap.darkFountains.values()) {
-                if (fountain.fountainPos.getX() == depthsX && fountain.fountainPos.getZ() == depthsZ) {
-                    return true;
-                }
+                Vec2 originPos = new Vec2(depthsX, depthsZ);
+                Vec2 fountainPos = new Vec2(fountain.fountainPos.getX(), fountain.fountainPos.getZ());
+
+                return originPos.distanceToSqr(fountainPos) < Mth.square(16);
             }
             return false;
         }).orElse(false);
