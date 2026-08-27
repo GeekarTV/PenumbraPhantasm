@@ -828,7 +828,7 @@ public class FountainRenderUtil {
 				swirlDim = 0;
 			}
 			if (openingTick >= openingShadowDurationFull && openingTick < OPENING_FINISH) {
-				swirlDim = Mth.lerp((openingTick - openingShadowDurationFull) / OPENING_FINISH, 0, swirlDim);
+				swirlDim = Mth.lerp((openingTick - openingShadowDurationFull) / (OPENING_FINISH - openingShadowDurationFull), 0, swirlDim);
 			}
 
 			if (sealingTick >= 0 && sealingTick < DEPTHS_FADE_OUT_DURATION) {
@@ -856,7 +856,7 @@ public class FountainRenderUtil {
 						baseSize = 0;
 					}
 					if (openingTick >= openingShadowDurationFull && openingTick < OPENING_FINISH) {
-						baseSize = Mth.lerp((openingTick - openingShadowDurationFull) / OPENING_FINISH, 6, DEPTHS_SWIRL_SIZE);
+						baseSize = Mth.lerp((openingTick - openingShadowDurationFull) / (OPENING_FINISH - openingShadowDurationFull), 6, DEPTHS_SWIRL_SIZE);
 					}
 
 					if (sealingTick >= 0) {
@@ -894,13 +894,15 @@ public class FountainRenderUtil {
 
 				if (level != null) {
 					float vortexYaw = (level.getGameTime() + partialTick) * DEPTHS_VORTEX_DEG_PER_TICK;
+					float vortexSize = DEPTHS_VORTEX_PIXELS;
 
 					if (openingTick >= openingShadowDurationFull) {
-						float openingTicks = fountain.openingTick + partialTick;
+						float openingTicks = fountain.openingTick - openingShadowDurationFull + partialTick;
 						float openingStartTime = level.getGameTime() - openingTick;
 						float vortexYawOpeningStart = openingStartTime * DEPTHS_VORTEX_DEG_PER_TICK;
 
-						vortexYaw = DEPTHS_VORTEX_DEG_PER_TICK * (vortexYawOpeningStart + openingTicks + (openingTicks * openingTicks) / (2f * OPENING_FINISH));
+						vortexYaw = DEPTHS_VORTEX_DEG_PER_TICK * (vortexYawOpeningStart + openingTicks + (openingTicks * openingTicks) / (2f * openingShadowDurationFull - OPENING_FINISH));
+						vortexSize = Mth.lerp((openingTick - openingShadowDurationFull) / (OPENING_FINISH - openingShadowDurationFull), DEPTHS_VORTEX_PIXELS * 3, DEPTHS_VORTEX_PIXELS);
 					}
 
 					if (sealingTick >= 0) {
@@ -909,6 +911,7 @@ public class FountainRenderUtil {
 						float vortexYawSealStart = sealingStartTime * DEPTHS_VORTEX_DEG_PER_TICK;
 
 						vortexYaw = DEPTHS_VORTEX_DEG_PER_TICK * (vortexYawSealStart + sealingTicks - (sealingTicks * sealingTicks) / (2f * DEPTHS_FADE_OUT_DURATION));
+						vortexSize = Mth.lerp(sealingTicks / DEPTHS_FADE_OUT_DURATION, DEPTHS_VORTEX_PIXELS, DEPTHS_VORTEX_PIXELS * 3);
 					}
 
 					poseStack.pushPose();
@@ -917,7 +920,7 @@ public class FountainRenderUtil {
 					poseStack.mulPose(Axis.YP.rotationDegrees(vortexYaw));
 
 					renderDepthsHorizontalPlane(poseStack, buffer.getBuffer(RenderTypes.fountainNoCull(DEPTHS_VORTEX)),
-							DEPTHS_VORTEX_PIXELS / 16f, 0f, 1f, 1f, 1f, swirlDim);
+							vortexSize / 16f, 0f, 1f, 1f, 1f, swirlDim);
 
 					poseStack.popPose();
 				}
