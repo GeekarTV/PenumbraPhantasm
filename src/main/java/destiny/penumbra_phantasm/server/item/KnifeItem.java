@@ -9,6 +9,7 @@ import java.util.Set;
 
 import destiny.penumbra_phantasm.ServerConfig;
 import destiny.penumbra_phantasm.server.capability.SoulCapability;
+import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.ImmutableMultimap;
@@ -126,10 +127,9 @@ public class KnifeItem extends SwordItem {
             return InteractionResultHolder.fail(stack);
         }
 
-        BlockPos occupancySeed = player.getOnPos().above();
-        if (DarkFountain.isDepthsXzOccupied(((ServerLevel) level).getServer(),
-                DarkFountain.scaledDepthsX(occupancySeed.getX()),
-                DarkFountain.scaledDepthsZ(occupancySeed.getZ()))) {
+        BlockPos occupancyPos = player.getOnPos().above();
+        Vec2 occupancyPosFlat = new Vec2(occupancyPos.getX(), occupancyPos.getZ());
+        if (DarkFountain.isDepthsXzOccupied(((ServerLevel) level).getServer(), occupancyPosFlat)) {
             player.displayClientMessage(Component.translatable("message.penumbra_phantasm.making_fountain_depths_conflict"), true);
             return InteractionResultHolder.fail(stack);
         }
@@ -534,8 +534,9 @@ public class KnifeItem extends SwordItem {
         if (depths != null) {
             int depthsX = DarkFountain.scaledDepthsX(fountainPos.getX());
             int depthsZ = DarkFountain.scaledDepthsZ(fountainPos.getZ());
+            Vec2 depthsPos = new Vec2(depthsX, depthsZ);
 
-            if (DarkFountain.isDepthsXzOccupied(depths, depthsX, depthsZ)) {
+            if (DarkFountain.isDepthsXzOccupied(depths, depthsPos)) {
                 lightCap.removeDarkFountain(level, fountainPos);
                 darkCap.removeDarkFountain(targetLevel, darkFountainPos);
 
@@ -545,7 +546,9 @@ public class KnifeItem extends SwordItem {
                 return;
             }
 
-            BlockPos depthsFountainPos = DarkFountain.resolveDepthsFountainPos(depths, fountainPos);
+            depthsPos = DarkFountain.getBumpedDepthsXZ(depths, depthsPos);
+
+            BlockPos depthsFountainPos = DarkFountain.resolveDepthsFountainPos(depths, depthsPos);
             ResourceKey<Level> darkDimension = targetLevel.dimension();
 
             depths.getCapability(CapabilityRegistry.DARK_FOUNTAIN).ifPresent(depthsCap -> {

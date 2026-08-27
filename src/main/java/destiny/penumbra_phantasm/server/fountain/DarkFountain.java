@@ -1144,11 +1144,12 @@ public class DarkFountain {
 
         int depthsX = scaledDepthsX(this.fountainPos.getX());
         int depthsZ = scaledDepthsZ(this.fountainPos.getZ());
-        if (isDepthsXzOccupied(depths, depthsX, depthsZ)) {
+        Vec2 depthsPos = new Vec2(depthsX, depthsZ);
+        if (isDepthsXzOccupied(depths, depthsPos)) {
             return;
         }
 
-        BlockPos pos = resolveDepthsFountainPos(depths, this.fountainPos);
+        BlockPos pos = resolveDepthsFountainPos(depths, new Vec2(this.fountainPos.getX(), this.fountainPos.getZ()));
         depths.getCapability(CapabilityRegistry.DARK_FOUNTAIN).ifPresent(cap -> {
             cap.addDarkFountain(pos, depths.dimension(), this.fountainPos, darkLevel.dimension(),
                     -1, 0, 0, 0, new HashSet<>(), new ArrayList<>(), -1, -1, 0);
@@ -1177,18 +1178,19 @@ public class DarkFountain {
         return originZ * DEPTHS_XZ_SCALE;
     }
 
-    public static boolean isDepthsXzOccupied(MinecraftServer server, int depthsX, int depthsZ) {
+    public static boolean isDepthsXzOccupied(MinecraftServer server, Vec2 depthsPos) {
+        Vec2 scaledPos = new Vec2(DarkFountain.scaledDepthsX((int) depthsPos.x), DarkFountain.scaledDepthsZ((int) depthsPos.y));
         ServerLevel depths = DarkWorldUtil.getDepths(server);
         if (depths == null) {
             return false;
         }
-        return isDepthsXzOccupied(depths, depthsX, depthsZ);
+        return isDepthsXzOccupied(depths, scaledPos);
     }
 
-    public static boolean isDepthsXzOccupied(ServerLevel depths, int depthsX, int depthsZ) {
+    public static boolean isDepthsXzOccupied(ServerLevel depths, Vec2 depthsPos) {
         return depths.getCapability(CapabilityRegistry.DARK_FOUNTAIN).map(cap -> {
             for (DarkFountain fountain : cap.darkFountains.values()) {
-                Vec2 originPos = new Vec2(depthsX, depthsZ);
+                Vec2 originPos = new Vec2(depthsPos.x, depthsPos.y);
                 Vec2 fountainPos = new Vec2(fountain.fountainPos.getX(), fountain.fountainPos.getZ());
 
                 return originPos.distanceToSqr(fountainPos) < Mth.square(16);
@@ -1197,13 +1199,50 @@ public class DarkFountain {
         }).orElse(false);
     }
 
-    public static BlockPos resolveDepthsFountainPos(ServerLevel depths, BlockPos originXZ) {
-        BlockPos scaled = new BlockPos(scaledDepthsX(originXZ.getX()), depths.getMinBuildHeight(), scaledDepthsZ(originXZ.getZ()));
+    public static Vec2 getBumpedDepthsXZ(ServerLevel depths, Vec2 originPos) {
+        DarkFountainCapability capability;
+        LazyOptional<DarkFountainCapability> darkLazyCapability = depths.getCapability(CapabilityRegistry.DARK_FOUNTAIN);
+        if(darkLazyCapability.isPresent() && darkLazyCapability.resolve().isPresent())
+            capability = darkLazyCapability.resolve().get();
+        else {
+            return new Vec2(originPos.x, originPos.y);
+        }
+
+        List<Vec2> fountainsTooClose = new ArrayList<>();
+
+        for (DarkFountain fountain : capability.darkFountains.values()) {
+            Vec2 fountainPos = new Vec2(fountain.fountainPos.getX(), fountain.fountainPos.getZ());
+            float distance = originPos.distanceToSqr(fountainPos);
+
+            if (distance < Mth.square(32)) {
+                fountainsTooClose.add(fountainPos);
+            }
+        }
+
+        if (fountainsTooClose.isEmpty()) {
+            return new Vec2(originPos.x, originPos.y);
+        }
+
+        Vec2 combinedAwayVec = Vec2.ZERO;
+        for (Vec2 conflictPos : fountainsTooClose) {
+            Vec2 awayVec = new Vec2(originPos.x - conflictPos.x, originPos.y - conflictPos.y);
+
+            awayVec = awayVec.normalized();
+            combinedAwayVec = combinedAwayVec.add(awayVec);
+        }
+
+        return originPos.add(combinedAwayVec.normalized().scale(32));
+    }
+
+    public static BlockPos resolveDepthsFountainPos(ServerLevel depths, Vec2 originXZ) {
+        BlockPos scaled = new BlockPos(scaledDepthsX((int) originXZ.x), depths.getMinBuildHeight(), scaledDepthsZ((int) originXZ.y));
         ChunkPos chunkPos = new ChunkPos(scaled);
+
         depths.setChunkForced(chunkPos.x, chunkPos.z, true);
         BlockPos heightmap = depths.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, scaled);
         BlockPos pos = new BlockPos(scaled.getX(), heightmap.getY() + DEPTHS_FOUNTAIN_Y_OFFSET, scaled.getZ());
         depths.setChunkForced(chunkPos.x, chunkPos.z, false);
+
         return pos;
     }
 
