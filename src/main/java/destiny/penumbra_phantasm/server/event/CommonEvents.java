@@ -71,8 +71,9 @@ public class CommonEvents {
         }
         ServerLevel overworld = player.getServer().overworld();
         BlockPos spawnPos = overworld.getSharedSpawnPos();
-        player.teleportTo(overworld, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5,
-                overworld.getSharedSpawnAngle(), 0f);
+
+        player.teleportTo(overworld, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, overworld.getSharedSpawnAngle(), 0f);
+
         player.displayClientMessage(Component.translatable("message.penumbra_phantasm.dark_world_without_fountain"), true);
     }
 
@@ -380,6 +381,7 @@ public class CommonEvents {
         if(event.phase == TickEvent.Phase.END && event.side.isServer() && event.player instanceof ServerPlayer player) {
             event.player.getCapability(CapabilityRegistry.SOUL).ifPresent(cap -> cap.tick(event.player.level(), player));
             event.player.getCapability(CapabilityRegistry.SCREEN_ANIMATION).ifPresent(cap -> cap.tick(event.player.level(), player));
+            rescuePlayerIfStrandedDarkWorldWithoutFountain(player);
             EggRoomManager.tickPlayer(player);
         }
     }
