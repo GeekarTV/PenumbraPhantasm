@@ -25,7 +25,7 @@ public final class SoulHearthLightManager {
     private static final Map<Player, SourceState> SOURCE_STATES = new HashMap<>();
     private static final Map<Player, Long> LAST_UPDATE_TICK = new HashMap<>();
 
-    public static int UPDATE_INTERVAL_TICKS = 2;
+    public static int UPDATE_INTERVAL_TICKS = 5;
     private static final BlockPos.MutableBlockPos MUTABLE_POS = new BlockPos.MutableBlockPos();
 
     private SoulHearthLightManager() {}
