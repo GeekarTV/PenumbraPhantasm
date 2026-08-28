@@ -181,7 +181,7 @@
   "block.penumbra_phantasm.cliffrock_path": "Chemin de roche du précipice",
   "block.penumbra_phantasm.cliffrock_slide": "Glissière de roche du précipice",
   "block.penumbra_phantasm.cliffrock_pillar": "Pilier de roche du précipice",
-  "block.penumbra_phantasm.chiseled_cliffrock": "Rocher chisélé du précipice",
+  "block.penumbra_phantasm.chiseled_cliffrock": "Roche chisélé du précipice",
 
   "block.penumbra_phantasm.cliffrock_eye": "Œil de roche du précipice",
   "block.penumbra_phantasm.weeping_eye": "Œil pleurant",
@@ -195,7 +195,7 @@
   "block.penumbra_phantasm.ichor_candle": "Bougie d'Ichor",
   "block.penumbra_phantasm.ichor_fire": "Feu d'Ichor",
 
-  "block.penumbra_phantasm.polished_cliffrock": "Rocher poli du précipice",
+  "block.penumbra_phantasm.polished_cliffrock": "Roche poli du précipice",
   "block.penumbra_phantasm.polished_cliffrock_stairs": "Escaliers de roche polie du précipice",
   "block.penumbra_phantasm.polished_cliffrock_slab": "Dalle de roche polie du précipice",
   "block.penumbra_phantasm.polished_cliffrock_wall": "Mur de roche polie du précipice",
@@ -209,14 +209,14 @@
   "block.penumbra_phantasm.cliffrock_brick_button": "Bouton de briques de roche du précipice",
   "block.penumbra_phantasm.cliffrock_brick_pressure_plate": "Plaque de pression de briques de roche du précipice",
 
-  "block.penumbra_phantasm.cliffrock": "Rocher du précipice",
+  "block.penumbra_phantasm.cliffrock": "Roche du précipice",
   "block.penumbra_phantasm.cliffrock_stairs": "Escaliers de roche du précipice",
   "block.penumbra_phantasm.cliffrock_slab": "Dalle de roche du précipice",
   "block.penumbra_phantasm.cliffrock_wall": "Mur de roche du précipice",
   "block.penumbra_phantasm.cliffrock_button": "Bouton de roche du précipice",
   "block.penumbra_phantasm.cliffrock_pressure_plate": "Plaque de pression de roche du précipice",
 
-  "block.penumbra_phantasm.cobbled_cliffrock": "Rocher pavée du précipice",
+  "block.penumbra_phantasm.cobbled_cliffrock": "Roche pavée du précipice",
   "block.penumbra_phantasm.cobbled_cliffrock_stairs": "Escaliers de roche pavée du précipice",
   "block.penumbra_phantasm.cobbled_cliffrock_slab": "Dalle de roche pavée du précipice",
   "block.penumbra_phantasm.cobbled_cliffrock_wall": "Mur de roche pavée du précipice",
