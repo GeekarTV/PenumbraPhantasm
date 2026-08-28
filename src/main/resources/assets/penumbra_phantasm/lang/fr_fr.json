@@ -21,14 +21,14 @@
   "item.penumbra_phantasm.item_music_medium_the_holy": "ITEM_MUSIC_MEDIUM",
   "item.penumbra_phantasm.item_music_medium_the_holy.desc": "Toby Fox - THE HOLY",
 
-  "item.penumbra_phantasm.dark_candy_stick": "Bâton en bonbon d'ombre",
+  "item.penumbra_phantasm.dark_candy_stick": "Bâton en bonbon sombre",
   "item.penumbra_phantasm.ichor": "Ichor",
 
-  "item.penumbra_phantasm.dark_candy_sword": "Épée en bonbon d'ombre",
-  "item.penumbra_phantasm.dark_candy_pickaxe": "Pioche en bonbon d'ombre",
-  "item.penumbra_phantasm.dark_candy_axe": "Hache en bonbon d'ombre",
-  "item.penumbra_phantasm.dark_candy_shovel": "Pelle en bonbon d'ombre",
-  "item.penumbra_phantasm.dark_candy_hoe": "Houe en bonbon d'ombre",
+  "item.penumbra_phantasm.dark_candy_sword": "Épée en bonbon sombre",
+  "item.penumbra_phantasm.dark_candy_pickaxe": "Pioche en bonbon sombre",
+  "item.penumbra_phantasm.dark_candy_axe": "Hache en bonbon sombre",
+  "item.penumbra_phantasm.dark_candy_shovel": "Pelle en bonbon sombre",
+  "item.penumbra_phantasm.dark_candy_hoe": "Houe en bonbon sombre",
 
   "item.penumbra_phantasm.umbrastone_sword": "Épée en umbrastone",
   "item.penumbra_phantasm.umbrastone_pickaxe": "Pioche en umbrastone",
@@ -36,16 +36,16 @@
   "item.penumbra_phantasm.umbrastone_shovel": "Pelle en umbrastone",
   "item.penumbra_phantasm.umbrastone_hoe": "Houe en umbrastone",
 
-  "item.penumbra_phantasm.raw_rosegold": "Or rosé brut",
-  "item.penumbra_phantasm.rosegold_ingot": "Lingot d'or rosé",
+  "item.penumbra_phantasm.raw_rosegold": "Or rose brut",
+  "item.penumbra_phantasm.rosegold_ingot": "Lingot d'or rose",
 
-  "item.penumbra_phantasm.rosegold_sword": "Épée en or rosé",
-  "item.penumbra_phantasm.rosegold_axe": "Hache en or rosé",
-  "item.penumbra_phantasm.rosegold_pickaxe": "Pioche en or rosé",
-  "item.penumbra_phantasm.rosegold_shovel": "Pelle en or rosé",
-  "item.penumbra_phantasm.rosegold_hoe": "Houe en or rosé",
+  "item.penumbra_phantasm.rosegold_sword": "Épée en or rose",
+  "item.penumbra_phantasm.rosegold_axe": "Hache en or rose",
+  "item.penumbra_phantasm.rosegold_pickaxe": "Pioche en or rose",
+  "item.penumbra_phantasm.rosegold_shovel": "Pelle en or rose",
+  "item.penumbra_phantasm.rosegold_hoe": "Houe en or rose",
 
-  "item.penumbra_phantasm.rosegold_lighter": "Briquet en or rosé",
+  "item.penumbra_phantasm.rosegold_lighter": "Briquet en or rose",
 
   "item.penumbra_phantasm.ivory": "Ivoire",
 
@@ -55,23 +55,23 @@
   "item.penumbra_phantasm.ivory_shovel": "Pelle en ivoire",
   "item.penumbra_phantasm.ivory_hoe": "Houe en ivoire",
 
-  "item.penumbra_phantasm.dark_candy_bucket": "Seau en bonbon d'ombre",
+  "item.penumbra_phantasm.dark_candy_bucket": "Seau en bonbon sombre",
   "item.penumbra_phantasm.luminescent_water_bucket": "Seau d'eau lumineuse",
   "item.penumbra_phantasm.pure_darkness_bucket": "Seau de pure ténèbres",
 
   "item.penumbra_phantasm.egg": "Œuf",
 
-  "block.penumbra_phantasm.twilight_grass": "Twilight Grass",
-  "block.penumbra_phantasm.twilight_grass_block": "Twilight Grass Block",
-  "block.penumbra_phantasm.night_grass": "Night Grass",
+  "block.penumbra_phantasm.twilight_grass": "Herbe du crépuscule",
+  "block.penumbra_phantasm.twilight_grass_block": "Bloc d'herbe du crépuscule",
+  "block.penumbra_phantasm.night_grass": "Herbe de la nuit",
 
-  "block.penumbra_phantasm.night_grass_block": "Night Grass Block",
+  "block.penumbra_phantasm.night_grass_block": "Bloc d'herbe de la nuit",
 
-  "block.penumbra_phantasm.night_dirt": "Night Dirt",
+  "block.penumbra_phantasm.night_dirt": "Terre de la nuit",
 
-  "block.penumbra_phantasm.umbrastone_pillar": "Umbrastone Pillar",
-  "block.penumbra_phantasm.chiseled_umbrastone": "Chiseled Umbrastone",
-  "block.penumbra_phantasm.umbrastone_furnace": "Umbrastone Furnace",
+  "block.penumbra_phantasm.umbrastone_pillar": "Pilier d'umbrastone",
+  "block.penumbra_phantasm.chiseled_umbrastone": "Umbrastone ciselé",
+  "block.penumbra_phantasm.umbrastone_furnace": "Fourneau en umbrastone",
 
   "block.penumbra_phantasm.polished_umbrastone": "Umbrastone poli",
   "block.penumbra_phantasm.polished_umbrastone_stairs": "Escaliers en umbrastone poli",
@@ -88,18 +88,18 @@
   "block.penumbra_phantasm.umbrastone_brick_pressure_plate": "Plaque de pression en briques d'Umbrastone",
 
   "block.penumbra_phantasm.umbrastone": "Umbrastone",
-  "block.penumbra_phantasm.umbrastone_stairs": "Umbrastone Stairs",
-  "block.penumbra_phantasm.umbrastone_slab": "Umbrastone Slab",
-  "block.penumbra_phantasm.umbrastone_wall": "Umbrastone Wall",
-  "block.penumbra_phantasm.umbrastone_button": "Umbrastone Button",
-  "block.penumbra_phantasm.umbrastone_pressure_plate": "Umbrastone Pressure Plate",
+  "block.penumbra_phantasm.umbrastone_stairs": "Escaliers en umbrastone",
+  "block.penumbra_phantasm.umbrastone_slab": "Dalle en umbrastone",
+  "block.penumbra_phantasm.umbrastone_wall": "Mur en umbrastone",
+  "block.penumbra_phantasm.umbrastone_button": "Bouton en umbrastone",
+  "block.penumbra_phantasm.umbrastone_pressure_plate": "Plaque de pression en umbrastone",
 
-  "block.penumbra_phantasm.cobbled_umbrastone": "Cobbled Umbrastone",
-  "block.penumbra_phantasm.cobbled_umbrastone_stairs": "Cobbled Umbrastone Stairs",
-  "block.penumbra_phantasm.cobbled_umbrastone_slab": "Cobbled Umbrastone Slab",
-  "block.penumbra_phantasm.cobbled_umbrastone_wall": "Cobbled Umbrastone Wall",
-  "block.penumbra_phantasm.cobbled_umbrastone_button": "Cobbled Umbrastone Button",
-  "block.penumbra_phantasm.cobbled_umbrastone_pressure_plate": "Cobbled Umbrastone Pressure Plate",
+  "block.penumbra_phantasm.cobbled_umbrastone": "Umbrastone pavée",
+  "block.penumbra_phantasm.cobbled_umbrastone_stairs": "Escaliers en umbrastone pavée",
+  "block.penumbra_phantasm.cobbled_umbrastone_slab": "Dalle en umbrastone pavée",
+  "block.penumbra_phantasm.cobbled_umbrastone_wall": "Mur en umbrastone pavée",
+  "block.penumbra_phantasm.cobbled_umbrastone_button": "Bouton en umbrastone pavée",
+  "block.penumbra_phantasm.cobbled_umbrastone_pressure_plate": "Plaque de pression en umbrastone pavée",
 
   "block.penumbra_phantasm.scarlet_bush": "Buisson écarlate",
   "block.penumbra_phantasm.tall_scarlet_bush": "Haut buisson écarlate",
@@ -128,7 +128,7 @@
   "block.penumbra_phantasm.dark_candy_block": "Bloc de bonbon sombre",
 
   "block.penumbra_phantasm.dark_candy_sapling": "Pousse de bonbon sombre",
-  "block.penumbra_phantasm.potted_dark_candy_sapling": "Potted Dark Candy Sapling",
+  "block.penumbra_phantasm.potted_dark_candy_sapling": "Pousse de bonbon sombre en pot",
 
   "block.penumbra_phantasm.dark_candy_leaves": "Feuilles de bonbon sombre",
   "block.penumbra_phantasm.fallen_dark_candy_leaves": "Feuilles de bonbon sombre tombées",
@@ -216,12 +216,12 @@
   "block.penumbra_phantasm.cliffrock_button": "Bouton de roche du précipice",
   "block.penumbra_phantasm.cliffrock_pressure_plate": "Plaque de pression de roche du précipice",
 
-  "block.penumbra_phantasm.cobbled_cliffrock": "Rocher empierré du précipice",
-  "block.penumbra_phantasm.cobbled_cliffrock_stairs": "Escaliers de roche empierrée du précipice",
-  "block.penumbra_phantasm.cobbled_cliffrock_slab": "Dalle de roche empierrée du précipice",
-  "block.penumbra_phantasm.cobbled_cliffrock_wall": "Mur de roche empierrée du précipice",
-  "block.penumbra_phantasm.cobbled_cliffrock_button": "Bouton de roche empierrée du précipice",
-  "block.penumbra_phantasm.cobbled_cliffrock_pressure_plate": "Plaque de pression de roche empierrée du précipice",
+  "block.penumbra_phantasm.cobbled_cliffrock": "Rocher pavée du précipice",
+  "block.penumbra_phantasm.cobbled_cliffrock_stairs": "Escaliers de roche pavée du précipice",
+  "block.penumbra_phantasm.cobbled_cliffrock_slab": "Dalle de roche pavée du précipice",
+  "block.penumbra_phantasm.cobbled_cliffrock_wall": "Mur de roche pavée du précipice",
+  "block.penumbra_phantasm.cobbled_cliffrock_button": "Bouton de roche pavée du précipice",
+  "block.penumbra_phantasm.cobbled_cliffrock_pressure_plate": "Plaque de pression de roche pavée du précipice",
 
   "block.penumbra_phantasm.dark_marble_pillar": "Pilier de marbre sombre",
   "block.penumbra_phantasm.chiseled_dark_marble": "Marbre sombre ciselé",
@@ -256,7 +256,7 @@
 
   "block.penumbra_phantasm.tenebralith_spike": "Tenebralith Spike",
   "block.penumbra_phantasm.tenebralith_path": "Tenebralith Path",
-  "block.penumbra_phantasm.dark_sand": "Dark Sand",
+  "block.penumbra_phantasm.dark_sand": "Sable sombre",
   "block.penumbra_phantasm.tenebralith_pillar": "Tenebralith Pillar",
   "block.penumbra_phantasm.chiseled_tenebralith": "Chiseled Tenebralith",
 
@@ -306,27 +306,27 @@
   "block.penumbra_phantasm.fire_door": "Porte de Feu",
   "block.penumbra_phantasm.cheshire_chest": "Coffre de Cheshire",
 
-  "block.penumbra_phantasm.umbrastone_rosegold_ore": "Minerai d'or rosé d'Umbrastone",
+  "block.penumbra_phantasm.umbrastone_rosegold_ore": "Minerai d'or rose d'Umbrastone",
 
   "block.penumbra_phantasm.dark_marble_ivory_ore": "Minerai d'ivoire de marbre sombre",
   "block.penumbra_phantasm.scarlet_marble_ivory_ore": "Minerai d'ivoire de marbre écarlate",
 
-  "block.penumbra_phantasm.rosegold_pillar": "Pilier en or rosé",
-  "block.penumbra_phantasm.chiseled_rosegold": "Or rosé ciselé",
+  "block.penumbra_phantasm.rosegold_pillar": "Pilier en or rose",
+  "block.penumbra_phantasm.chiseled_rosegold": "Or rose ciselé",
 
-  "block.penumbra_phantasm.rosegold_block": "Bloc d'or rosé",
-  "block.penumbra_phantasm.rosegold_stairs": "Escaliers d'or rosé",
-  "block.penumbra_phantasm.rosegold_slab": "Dalle d'or rosé",
-  "block.penumbra_phantasm.rosegold_wall": "Mur d'or rosé",
-  "block.penumbra_phantasm.rosegold_button": "Bouton d'or rosé",
-  "block.penumbra_phantasm.rosegold_pressure_plate": "Plaque de pression d'or rosé",
+  "block.penumbra_phantasm.rosegold_block": "Bloc d'or rose",
+  "block.penumbra_phantasm.rosegold_stairs": "Escaliers d'or rose",
+  "block.penumbra_phantasm.rosegold_slab": "Dalle d'or rose",
+  "block.penumbra_phantasm.rosegold_wall": "Mur d'or rose",
+  "block.penumbra_phantasm.rosegold_button": "Bouton d'or rose",
+  "block.penumbra_phantasm.rosegold_pressure_plate": "Plaque de pression d'or rose",
 
-  "block.penumbra_phantasm.rosegold_bricks": "Briques d'or rosé",
-  "block.penumbra_phantasm.rosegold_brick_stairs": "Escaliers de briques d'or rosé",
-  "block.penumbra_phantasm.rosegold_brick_slab": "Dalle de briques d'or rosé",
-  "block.penumbra_phantasm.rosegold_brick_wall": "Mur de briques d'or rosé",
-  "block.penumbra_phantasm.rosegold_brick_button": "Bouton de briques d'or rosé",
-  "block.penumbra_phantasm.rosegold_brick_pressure_plate": "Plaque de pression de briques d'or rosé",
+  "block.penumbra_phantasm.rosegold_bricks": "Briques d'or rose",
+  "block.penumbra_phantasm.rosegold_brick_stairs": "Escaliers de briques d'or rose",
+  "block.penumbra_phantasm.rosegold_brick_slab": "Dalle de briques d'or rose",
+  "block.penumbra_phantasm.rosegold_brick_wall": "Mur de briques d'or rose",
+  "block.penumbra_phantasm.rosegold_brick_button": "Bouton de briques d'or rose",
+  "block.penumbra_phantasm.rosegold_brick_pressure_plate": "Plaque de pression de briques d'or rose",
 
   "block.penumbra_phantasm.ivory_pillar": "Pilier en ivoire",
   "block.penumbra_phantasm.chiseled_ivory": "Ivoire ciselé",
@@ -422,7 +422,7 @@
   "tooltip.penumbra_phantasm.soul_hearth.soul_type.1": "DÉTERMINATION",
   "tooltip.penumbra_phantasm.soul_hearth.soul_type.2": "PATIENCE",
   "tooltip.penumbra_phantasm.soul_hearth.soul_type.3": "COURAGE",
-  "tooltip.penumbra_phantasm.soul_hearth.soul_type.4": "INTEGRITY",
+  "tooltip.penumbra_phantasm.soul_hearth.soul_type.4": "INTEGRITÉ",
   "tooltip.penumbra_phantasm.soul_hearth.soul_type.5": "PERSÉVÉRANCE",
   "tooltip.penumbra_phantasm.soul_hearth.soul_type.6": "GENTILLESSE",
   "tooltip.penumbra_phantasm.soul_hearth.soul_type.7": "JUSTICE",
